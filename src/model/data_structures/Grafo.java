@@ -1,9 +1,11 @@
 package model.data_structures;
 
+import java.util.Iterator;
+
 import model.vo.Interseccion;
 import model.vo.Vertice;
 
-public class Grafo <K extends Comparable <K>, V extends Vertice, A > implements IGrafo<K, V, A>
+public class Grafo <K extends Comparable <K>, V extends Vertice<A>, A > implements IGrafo<K, V, A>
 {
 	private int vertices;
 
@@ -34,13 +36,15 @@ public class Grafo <K extends Comparable <K>, V extends Vertice, A > implements 
 	{
 		DoublyLinkedList<K,V> temp = new DoublyLinkedList <K,V>(idVertex, infoVertex);
 		listaAdyacencia.put(idVertex, temp);
+		vertices++;
 	}
 
 	@Override
 	public void addEdge(K idVertexIni, K idVertexFin, A infoArc)
 	{
-		DoublyLinkedList<K,V> temp = listaAdyacencia.get(idVertexIni);
-		temp.add(idVertexFin, (V) new Interseccion((int) idVertexFin,infoArc));
+		DoublyLinkedList<K,Vertice <A>> temp = (DoublyLinkedList<K, Vertice<A>>) listaAdyacencia.get(idVertexIni);
+		temp.add(idVertexFin, new Interseccion<A>((int) idVertexFin,infoArc));
+		arcos++;
 	}
 
 	@Override
@@ -58,7 +62,7 @@ public class Grafo <K extends Comparable <K>, V extends Vertice, A > implements 
 	@Override
 	public A getInfoArc(K idVertexIni, K idVertexFin)
 	{
-		return (A) listaAdyacencia.get(idVertexIni).get(idVertexFin).darValor().darInformaciónArco();
+		return listaAdyacencia.get(idVertexIni).get(idVertexFin).darValor().darInformaciónArco();
 	}
 
 	@Override
@@ -68,8 +72,8 @@ public class Grafo <K extends Comparable <K>, V extends Vertice, A > implements 
 	}
 
 	@Override
-	public Iterable<K> adj(K idVertex)
+	public Iterator<K> adj(K idVertex)
 	{
-		return listaAdyacencia.get(idVertex);
+		return listaAdyacencia.get(idVertex).iteradorK();
 	}
 }

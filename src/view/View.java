@@ -84,7 +84,7 @@ public class View
 	private static void printMenu()
 	{
 		System.out.println("---------ISIS 1206 - Estructuras de datos----------");
-		System.out.println("---------------------Taller 8----------------------");
+		System.out.println("---------------------Proyecto 3----------------------");
 		System.out.println("1.  Cargar las intersecciones");
 		System.out.println("2.  Cargar las estaciones");
 		System.out.println("3.  Crear JSON");

@@ -6,18 +6,12 @@ import model.vo.Estacion;
 import model.vo.Interseccion;
 import model.vo.Sector;
 import model.vo.Vertice;
-
-import java.awt.BorderLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.Iterator;
-
-import javax.swing.JFrame;
-import javax.swing.WindowConstants;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.teamdev.jxmaps.MapViewOptions;
@@ -55,13 +49,13 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	// Estructuras donde se cargan los archivos
 
-	Grafo grafo = new Grafo();
+	Grafo<Integer, Vertice<Double>, Double> grafo = new Grafo<Integer, Vertice<Double>, Double>();
 
 	private Sector[] sectores;
 
-	private DoublyLinkedList <Integer, Interseccion> intersecciones = new DoublyLinkedList <Integer, Interseccion> ();
+	private DoublyLinkedList <Integer, Interseccion<Double>> intersecciones = new DoublyLinkedList <Integer, Interseccion<Double>> ();
 
-	private DoublyLinkedList <Integer, Estacion> estaciones = new DoublyLinkedList <Integer, Estacion> ();
+	private DoublyLinkedList <Integer, Estacion<Double>> estaciones = new DoublyLinkedList <Integer, Estacion<Double>> ();
 	//-------------------------------------------------------------------------------------
 	// MÉTODOS DE LA GUIA
 	//-------------------------------------------------------------------------------------
@@ -82,10 +76,28 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 				int id = Integer.parseInt(linea[0]);
 				double latitud = Double.parseDouble(linea[2]);
 				double longitud = Double.parseDouble(linea[1]);
-				Interseccion inter = new Interseccion (id, latitud, longitud);
+				Interseccion<Double> inter = new Interseccion<Double> (id, latitud, longitud);
 				grafo.addVertex(id, inter);
 				intersecciones.add(id, inter);
 				i ++;
+				if (i == 1)
+				{
+					latMin = latitud;
+					latMax = latitud;
+					longMin = longitud;
+					longMax = longitud;
+				}
+				else
+				{
+					if (latitud < latMin)
+						latMin = latitud;
+					else if (latitud > latMax)
+						latMax = latitud;
+					if (longitud < longMin)
+						longMin = longitud;
+					else if (longitud > longMax)
+						longMax = longitud;
+				}
 				l = reader.readLine();
 			}
 			reader.close();
@@ -134,6 +146,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 			BufferedReader reader = new BufferedReader (lector);
 			reader.readLine();
 			String l = reader.readLine();
+			sectorizar();
 			while (l != null)
 			{
 				String [] linea = l.split(",");
@@ -145,21 +158,37 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 				String [] date = (linea[6].charAt(0) == '"'? linea[6].substring(1, linea[6].length()-1) : linea[6]).split(" ");
 				LocalDateTime fecha = convertirFecha_Hora_LDT(date [0], date[1]);
 
-				Estacion station = new Estacion(id, nombre, latitud, longitud, capacidad, fecha);
-				// TODO grafo.addVertex(id, station);
+				Estacion<Double> station = new Estacion<Double>(id, nombre, latitud, longitud, capacidad, fecha);
+				grafo.addVertex(id, station);
 				estaciones.add(id, station);
 				l = reader.readLine();
 				i++;
+
+				// Agregar Arco
+				DoublyLinkedList<Integer, Interseccion> lista = sectores[darSector(latitud, longitud)-1].darIntersecciones();
+				if (lista != null)
+				{
+					Interseccion<Double> cercano = lista.getFirst().darValor();
+					Double distancia = distancia(cercano.darLatitud(), cercano.darLongitud(), latitud, longitud);
+					for (Interseccion<Double> temp: lista)
+					{
+						if (distancia(temp.darLatitud(),temp.darLongitud(), latitud, longitud) < distancia)
+						{
+							cercano = temp;
+							distancia = distancia(temp.darLatitud(),temp.darLongitud(), latitud, longitud);
+						}
+					}
+					grafo.addEdge(id, cercano.darId(), distancia);
+				}
 			}
 			reader.close();
 			lector.close();
 		}
 		catch (Exception e)
 		{
-			System.out.println("Hubo un problema al leer las estaciones, en la linea: " + i + "el mensaje es: " + e.getMessage());
+			System.out.println("Hubo un problema al leer las estaciones, en la linea: " + i + " \n el mensaje es: " + e.getMessage());
 			e.printStackTrace();
-		}
-
+		}		
 	}	
 
 	@Override
@@ -168,14 +197,17 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		try
 		{
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			FileWriter writer = new FileWriter(archivo);
+			File file = new File (archivo);
+			if (!file.exists())
+				file.createNewFile();
+			FileWriter writer = new FileWriter(file);
 			gson.toJson(grafo,writer);
 			writer.close();
 		}
 		catch (Exception e)
 		{
 			System.out.println("Hubo un problema al intentar generar el JSON, el problema es: " + e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -257,26 +289,26 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 			}
 		}
 
-		Iterator <Interseccion> iter = intersecciones.iterator();
+		Iterator <Interseccion<Double>> iter = intersecciones.iterator();
 		while (iter.hasNext())
 		{
-			Vertice temp = iter.next();
+			Interseccion<Double> temp = iter.next();
 			try
 			{
-				sectores[darSector(temp.darLatitud(), temp.darLongitud()) - 1].agregarInterseccion((Interseccion) temp);
+				sectores[darSector(temp.darLatitud(), temp.darLongitud()) - 1].agregarInterseccion(temp);
 			}
 			catch (Exception e)
 			{
 				System.out.println("El vertice " + temp.darId() + " quedó fuera de la sectorización");
 			}
 		}
-		Iterator <Estacion> iter2 = estaciones.iterator();
+		Iterator <Estacion<Double>> iter2 = estaciones.iterator();
 		while (iter.hasNext())
 		{
-			Vertice temp = iter.next();
+			Estacion<Double> temp = iter2.next();
 			try
 			{
-				sectores[darSector(temp.darLatitud(), temp.darLongitud()) - 1].agregarEstacion((Estacion) temp);
+				sectores[darSector(temp.darLatitud(), temp.darLongitud()) - 1].agregarEstacion(temp);
 			}
 			catch (Exception e)
 			{

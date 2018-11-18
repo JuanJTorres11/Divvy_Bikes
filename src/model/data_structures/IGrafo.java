@@ -1,5 +1,7 @@
 package model.data_structures;
 
+import java.util.Iterator;
+
 public interface IGrafo <K extends Comparable<K>,V, A>
 {
 	/**
@@ -59,5 +61,5 @@ public interface IGrafo <K extends Comparable<K>,V, A>
 	 * @param idVertex
 	 * @return Retorna los identificadores de los vértices adyacentes a idVertex.
 	 */
-	Iterable <K> adj (K idVertex);
+	Iterator <K> adj (K idVertex);
 }

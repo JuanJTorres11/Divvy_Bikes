@@ -1,6 +1,6 @@
 package model.vo;
 
-public class Interseccion <A> implements Vertice
+public class Interseccion <A> implements Vertice <A>
 {
 	// Atributos
 
@@ -81,15 +81,14 @@ public class Interseccion <A> implements Vertice
 		longitud = longitude;
 	}
 
-	@Override
-	public Object darInformaciónArco()
+	public A darInformaciónArco()
 	{
 		return informacionArco;
 	}
 
 	@Override
-	public void cambiarInformacionArco(Object info)
+	public void cambiarInformacionArco(A info)
 	{
-		informacionArco = (A) info;
+		informacionArco = info;
 	}
 }

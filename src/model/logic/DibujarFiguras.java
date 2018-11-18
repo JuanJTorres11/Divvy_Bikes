@@ -17,11 +17,7 @@ import com.teamdev.jxmaps.Rectangle;
 import com.teamdev.jxmaps.RectangleOptions;
 import com.teamdev.jxmaps.Circle;
 import com.teamdev.jxmaps.CircleOptions;
-import com.teamdev.jxmaps.Polygon;
-import com.teamdev.jxmaps.PolygonOptions;
 import com.teamdev.jxmaps.swing.MapView;
-
-import model.data_structures.DoublyLinkedList;
 import model.data_structures.ILista;
 import model.vo.Estacion;
 import model.vo.Interseccion;
@@ -41,18 +37,14 @@ public class DibujarFiguras extends MapView
 
 	Map map;
 
-	ILista <Integer, Interseccion> intersecciones;
+	ILista <Integer, Interseccion<Double>> intersecciones;
 
-	ILista <Integer, Estacion> estaciones;
+	ILista <Integer, Estacion<Double>> estaciones;
 
-	ILista circulos = new DoublyLinkedList<>();
-	
-	ILista rectangulos = new DoublyLinkedList<>();
-	
 	LatLngBounds bordes = new LatLngBounds (new LatLng (41.657972891282526, -87.81235055856227), new LatLng (42.063999, -87.52849012951941));
 
 	// Constructor
-	public DibujarFiguras(MapViewOptions options, ILista <Integer, Interseccion> inter, ILista <Integer, Estacion> est)
+	public DibujarFiguras(MapViewOptions options, ILista <Integer, Interseccion<Double>> inter, ILista <Integer, Estacion<Double>> est)
 	{
 		super(options);
 		// Setting of a ready handler to MapView object. onMapReady will be called when map initialization is done and
@@ -98,7 +90,7 @@ public class DibujarFiguras extends MapView
 		opciones.setStrokeColor(Color.RED.toString());
 		opciones.setStrokeWeight(5.0);
 
-		for (Interseccion inter: intersecciones)
+		for (Interseccion<Double> inter: intersecciones)
 		{
 			Circle circulo = new Circle(map);
 			circulo.setCenter(new LatLng(inter.darLatitud(), inter.darLongitud()));
@@ -111,8 +103,7 @@ public class DibujarFiguras extends MapView
 		RectangleOptions opciones = new RectangleOptions();
 		opciones.setFillOpacity(0);
 		opciones.setStrokeColor(Color.BLUE.toString());
-		int i = 0;
-		for (Estacion rect: estaciones)
+		for (Estacion<Double> rect: estaciones)
 		{
 			Rectangle rectangulo = new Rectangle (map);
 			LatLngBounds bordes = new LatLngBounds (new LatLng (rect.darLatitud() - 0.0004, rect.darLongitud() - 0.0006), new LatLng (rect.darLatitud() + 0.0004, rect.darLongitud() + 0.0006));

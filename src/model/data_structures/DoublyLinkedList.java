@@ -6,7 +6,7 @@ import java.util.Iterator;
  * Clase que representa la lista doblemente encadenada
  * @param <E> Tipo de los objetos que almacenará la lista.
  */
-public class DoublyLinkedList <K,V> implements ILista
+public class DoublyLinkedList <K,V> implements ILista<K,V>
 {
 	/**
 	 * Atributo que indica la cantidad de elementos que han sido almacenados en la lista.
@@ -79,6 +79,11 @@ public class DoublyLinkedList <K,V> implements ILista
 	public Iterator<V> iterator() 
 	{
 		return new Iterador <K,V> (primerNodo);
+	}
+
+	public Iterator<K> iteradorK()
+	{
+		return new IteradorK <K,V> (primerNodo);
 	}
 
 	/**
@@ -241,13 +246,12 @@ public class DoublyLinkedList <K,V> implements ILista
 	 * @return true en caso que se agregue el elemento o false en caso contrario. 
 	 * @throws NullPointerException si el elemento es nulo
 	 */
-	@Override
-	public boolean add(Object e)
+	public boolean add(V e)
 	{
 		boolean añadido = false;
 		if (e != null)
 		{
-			Node nuevo = new Node ((V) e);
+			Node<K,V> nuevo = new Node<K,V> (e);
 			if (primerNodo == null)
 			{
 				primerNodo = nuevo;
@@ -281,7 +285,7 @@ public class DoublyLinkedList <K,V> implements ILista
 		boolean añadido = false;
 		if (value != null && key != null)
 		{
-			Node nuevo = new Node (key, value);
+			Node<K,V> nuevo = new Node<K,V> (key, value);
 			if (primerNodo == null)
 			{
 				primerNodo = nuevo;
@@ -304,13 +308,13 @@ public class DoublyLinkedList <K,V> implements ILista
 	}
 
 	@Override
-	public boolean addAtEnd(Object e)
+	public boolean addAtEnd(V e)
 	{
 		boolean añadido = false;
 
 		if (e != null)
 		{
-			Node <K,V> nuevo = new Node <K,V>((V) e);
+			Node <K,V> nuevo = new Node <K,V>(e);
 			if(isEmpty())
 			{
 				primerNodo = nuevo;
@@ -369,7 +373,7 @@ public class DoublyLinkedList <K,V> implements ILista
 	 * @throws NullPointerException Si el elemento que se quiere agregar es null.
 	 */
 	@Override
-	public void addAtK(int index, Object elemento)
+	public void addAtK(int index, V elemento)
 	{
 		if (index < 0 || index > cantidadElementos)
 			throw new IndexOutOfBoundsException();
@@ -378,12 +382,12 @@ public class DoublyLinkedList <K,V> implements ILista
 		{
 			if (isEmpty())
 			{
-				primerNodo = new Node <K,V>((V) elemento);
+				primerNodo = new Node <K,V>(elemento);
 				cantidadElementos ++;
 			}
 			else
 			{
-				Node <K,V> nuevo = new Node <K,V>((V) elemento);
+				Node <K,V> nuevo = new Node <K,V>(elemento);
 				if (index == 0)
 					add(elemento);
 

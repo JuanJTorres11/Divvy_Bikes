@@ -1,7 +1,7 @@
 package model.vo;
 import java.time.LocalDateTime;
 
-public class Estacion <A> implements Comparable <Estacion>, Vertice
+public class Estacion <A> implements Comparable <Estacion<A>>, Vertice<A>
 {
 	private int id;
 
@@ -12,7 +12,7 @@ public class Estacion <A> implements Comparable <Estacion>, Vertice
 	private double longitud;
 
 	private int capacidad;
-	
+
 	private A informacionArco;
 
 	private LocalDateTime fechaInicio;
@@ -27,7 +27,7 @@ public class Estacion <A> implements Comparable <Estacion>, Vertice
 		fechaInicio = fecha;
 		informacionArco = null;
 	}
-	
+
 	public Estacion (int id, A info)
 	{
 		this.id = id;
@@ -134,7 +134,7 @@ public class Estacion <A> implements Comparable <Estacion>, Vertice
 	}
 
 	@Override
-	public int compareTo(Estacion est)
+	public int compareTo(Estacion<A> est)
 	{
 		if (est.id == this.id)
 			return 0;
@@ -145,14 +145,14 @@ public class Estacion <A> implements Comparable <Estacion>, Vertice
 	}
 
 	@Override
-	public Object darInformaciónArco()
+	public A darInformaciónArco()
 	{
 		return informacionArco;
 	}
 
 	@Override
-	public void cambiarInformacionArco(Object info)
+	public void cambiarInformacionArco(A info)
 	{
-		informacionArco = (A) info;
+		informacionArco = info;
 	}
 }
