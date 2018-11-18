@@ -1,32 +1,49 @@
 package controller;
 
-import java.io.File;
-
 import api.IManager;
-import model.logic.DibujarFiguras;
 import model.logic.Manager;
 
 public class Controller
 {
 	private static IManager manager = new Manager();
 
-	public void cargarEstaciones()
+	public static int[] cargarDatos(String dataTrips, String dataStations)
 	{
-		manager.cargarEstaciones();
+		return manager.cargar(dataTrips, dataStations);
 	}
 
-	public void cargarIntersecciones()
+	public String caminoCostoMinimo (double latI, double longI, double latF, double longF)
 	{
-		manager.cargarIntersecciones();
+		return manager.caminoCostoMinimo(latI, longI, latF, longF);
 	}
 
-	public void generarJSON(String archivo)
+	public String caminoMasCorto (double latI, double longI, double latF, double longF)
 	{
-		manager.generarJSON(archivo);	
+		return manager.caminoMasCorto(latI, longI, latF, longF);
 	}
 
-	public DibujarFiguras mostrarMapa()
+	public String estacionesMasCongestionadas()
 	{
-		return manager.mostrarMapa();
+		return manager.estacionesMasCongestionadas();
+	}
+
+	public String rutasEstaciones()
+	{
+		return manager.rutasEstaciones();
+	}
+
+	public String crearGrafo()
+	{
+		return manager.crearGrafo();
+	}
+
+	public String componentesConectados()
+	{
+		return manager.componentesConectados();
+	}
+
+	public void visualizarMapa()
+	{
+		manager.visualizarMapa();
 	}
 }
