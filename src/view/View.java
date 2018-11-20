@@ -1,14 +1,7 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.util.Scanner;
-
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.WindowConstants;
-
 import controller.Controller;
-import model.logic.DibujarFiguras;
 import model.logic.Manager;
 
 public class View 
@@ -36,12 +29,7 @@ public class View
 				long memoryBeforeCase1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 				long startTime = System.currentTimeMillis();
 
-				int [] i = Controller.cargarDatos(dataTrips, dataStations);
-
-				System.out.println("Total trips cargados en el sistema: " + i[0]);
-				System.out.println("Total estaciones cargadas en el sistema: " + i[1]);
-				System.out.println("Total ciclorutas cargadas en el sistema: " + i[2]);
-				System.out.println("Total bicicletas cargadas en el sistema: " + i[3]);
+				Controller.cargarDatos(dataTrips, dataStations);
 
 				//Tiempo en cargar
 				long endTime = System.currentTimeMillis();
@@ -99,13 +87,13 @@ public class View
 		System.out.println("3.  Encontrar el camino más corto (menor número de vértices) para un viaje en bicicleta");
 		System.out.println("4.  Determinar las n estaciones de bicicleta más congestionadas en Chicago");
 		System.out.println("5.  Calcular las rutas mínimas (con criterio distancia harvesiana) que conecten las n\r\n" + 
-				"estaciones encontradas en el punto anterior");
+				"	estaciones encontradas en el punto anterior");
 		System.out.println("6. Cree un Grafo Dirigido tomando como vértices únicamente los nodos estación y como\r\n" + 
-				"arcos los viajes de bicicletas entre las mismas.");
+				"	arcos los viajes de bicicletas entre las mismas.");
 		System.out.println("7. Calcule los componentes fuertemente conexos presentes en el grafo construido en el\r\n" + 
-				"punto anterior.");
+				"	punto anterior.");
 		System.out.println("1.  A partir del grafo construido en el punto 5 pinte sobre el mapa de\r\n" + 
-				"la red vial de Chicago utilizando Google Maps");
+				"	la red vial de Chicago utilizando Google Maps");
 		System.out.println("8.  Cerrar");
 		System.out.println("Digite el número de opción para ejecutar la tarea, luego presione enter: (Ej., 1):");
 	}

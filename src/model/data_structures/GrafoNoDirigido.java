@@ -5,7 +5,7 @@ import java.util.Iterator;
 import model.vo.Interseccion;
 import model.vo.Vertice;
 
-public class Grafo <K extends Comparable <K>, V extends Vertice<A>, A > implements IGrafo<K, V, A>
+public class GrafoNoDirigido <K extends Comparable <K>, V extends Vertice<A>, A > implements IGrafo<K, V, A>
 {
 	private int vertices;
 
@@ -13,7 +13,7 @@ public class Grafo <K extends Comparable <K>, V extends Vertice<A>, A > implemen
 
 	HashChain <K,DoublyLinkedList<K,V>>listaAdyacencia;
 
-	public Grafo ()
+	public GrafoNoDirigido ()
 	{
 		vertices = 0;
 		arcos = 0;
@@ -42,8 +42,8 @@ public class Grafo <K extends Comparable <K>, V extends Vertice<A>, A > implemen
 	@Override
 	public void addEdge(K idVertexIni, K idVertexFin, A infoArc)
 	{
-		DoublyLinkedList<K,Vertice <A>> temp = (DoublyLinkedList<K, Vertice<A>>) listaAdyacencia.get(idVertexIni);
-		temp.add(idVertexFin, new Interseccion<A>((int) idVertexFin,infoArc));
+		listaAdyacencia.get(idVertexIni).add(idVertexFin, (V) new Interseccion<A>((int) idVertexFin,infoArc));
+		listaAdyacencia.get(idVertexFin).add(idVertexIni, (V) new Interseccion<A>((int) idVertexIni,infoArc));
 		arcos++;
 	}
 

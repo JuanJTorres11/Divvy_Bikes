@@ -1,21 +1,22 @@
 package model.logic;
 
 import model.data_structures.DoublyLinkedList;
-import model.data_structures.Grafo;
+import model.data_structures.GrafoNoDirigido;
 import model.vo.Estacion;
 import model.vo.Interseccion;
-import model.vo.Sector;
 import model.vo.Trip;
 import model.vo.Vertice;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.Scanner;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.teamdev.jxmaps.MapViewOptions;
 
 import api.IManager;
@@ -53,6 +54,9 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	//Ruta del archivo de Intersecciones en la ciudad de Chicago
 	public static final String ARCOS = "data" + File.separator + "Adjacency_list_of_Chicago_Street_Lines.txt";
 
+	//Ruta del grafo
+	public static final String GRAFO = "data" + File.separator + "test.json";
+
 	//-------------------------------------------------------------------------------------
 	// ATRIBUTOS
 	//-------------------------------------------------------------------------------------
@@ -67,9 +71,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	// Estructuras donde se cargan los archivos
 
-	Grafo<Integer, Vertice<Double>, Double> grafo = new Grafo<Integer, Vertice<Double>, Double>();
-
-	private Sector[] sectores;
+	GrafoNoDirigido <Integer, Vertice<Double>, Double> grafo = new GrafoNoDirigido <Integer, Vertice<Double>, Double>();
 
 	private DoublyLinkedList <Integer, Interseccion<Double>> intersecciones = new DoublyLinkedList <Integer, Interseccion<Double>> ();
 
@@ -126,6 +128,20 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		catch (Exception e)
 		{
 			System.out.println("Hubo un problema al leer las interseciones, en la linea: " + i + "el mensaje es: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	public void cargarGrafo ()
+	{
+		Gson json = new Gson();
+		try
+		{
+			grafo = json.fromJson(new FileReader(GRAFO), grafo.getClass());
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -300,6 +316,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		int opcion;
 
 		//Q1
+		cargarGrafo();
 		cargarIntersecciones();
 		cargarEstaciones(stations[0]);
 		viajes = cargarViajes(trips[0]);
@@ -341,10 +358,6 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		return i;
 	}
 
-	private double distanciaVertices (int vertice1, int vertice2)
-	{
-		return distancia(grafo.getInfoVertex(vertice1).darLatitud(), grafo.getInfoVertex(vertice1).darLongitud(), grafo.getInfoVertex(vertice2).darLatitud(),grafo.getInfoVertex(vertice2).darLongitud());
-	}
 	private static double distancia (double startLat, double startLong, double endLat, double endLong)
 	{
 		double dLat  = Math.toRadians((endLat - startLat));
