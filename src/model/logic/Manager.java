@@ -2,21 +2,24 @@ package model.logic;
 
 import model.data_structures.DoublyLinkedList;
 import model.data_structures.GrafoNoDirigido;
+import model.data_structures.IGrafo;
+import model.data_structures.ILista;
+import model.vo.Camino;
+import model.vo.ComponenteFuertementeConectada;
 import model.vo.Estacion;
 import model.vo.Interseccion;
 import model.vo.Trip;
 import model.vo.Vertice;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.teamdev.jxmaps.MapViewOptions;
 
 import api.IManager;
@@ -83,7 +86,6 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	// MÉTODOS DE LA GUIA
 	//-------------------------------------------------------------------------------------
 
-	@Override
 	public void cargarIntersecciones()
 	{
 		int i = 0;
@@ -134,10 +136,11 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	public void cargarGrafo ()
 	{
+		TypeToken <GrafoNoDirigido<Integer, Vertice<Double>, Double>> tipoGrafo = (TypeToken<GrafoNoDirigido<Integer, Vertice<Double>, Double>>) new TypeToken<GrafoNoDirigido<Integer, Vertice<Double>, Double>>() {}.getType();
 		Gson json = new Gson();
 		try
 		{
-			grafo = json.fromJson(new FileReader(GRAFO), grafo.getClass());
+			grafo = json.fromJson(new FileReader(GRAFO), (Type) tipoGrafo);
 		}
 		catch (Exception e)
 		{
@@ -194,7 +197,6 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		return temp;
 	}
 
-	@Override
 	public void cargarEstaciones(String ruta)
 	{
 		int i = 0;
@@ -231,7 +233,6 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		}		
 	}
 
-	@Override
 	public DibujarFiguras mostrarMapa()
 	{
 		MapViewOptions options = new MapViewOptions();
@@ -241,62 +242,73 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		return mapa;
 	}
 
-	@Override
-	public String caminoCostoMinimo(double latI, double longI, double latF, double longF) {
+	public void cargarSistema()
+	{
 		// TODO Auto-generated method stub
+	}
+
+	public Camino A1_menorDistancia(double latInicial, double lonInicial, double latFinal, double lonFinal)
+	{
+		//TODO Visualizacion Mapa
 		return null;
 	}
 
-	@Override
-	public String caminoMasCorto(double latI, double longI, double latF, double longF) {
-		// TODO Auto-generated method stub
+	public Camino A2_menorNumVertices(double latInicial, double lonInicial, double latFinal, double lonFinal)
+	{
+		//TODO Visualizacion Mapa
 		return null;
 	}
 
-	@Override
-	public String estacionesMasCongestionadas() {
-		// TODO Auto-generated method stub
+	public ILista<?, Estacion> B1_estacionesCongestionadas(int n)
+	{
+		//TODO Visualizacion Mapa
 		return null;
 	}
 
-	@Override
-	public String rutasEstaciones() {
-		// TODO Auto-generated method stub
+	public ILista<?, Camino> B2_rutasMinimas(ILista<?, Estacion> stations)
+	{
+		//TODO Visualizacion Mapa
 		return null;
 	}
 
-	@Override
-	public String crearGrafo() {
-		// TODO Auto-generated method stub
+	public IGrafo C1_grafoEstaciones()
+	{
+		//TODO Visualizacion Mapa
 		return null;
 	}
 
-	@Override
-	public String componentesConectados() {
-		// TODO Auto-generated method stub
+	public void C1_persistirGrafoEstaciones(IGrafo grafoEstaciones)
+	{
+		//TODO Visualizacion Mapa
+	}
+
+	public ILista<?, ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
+	{
+		//TODO Visualizacion Mapa
 		return null;
 	}
 
-	@Override
-	public void visualizarMapa() {
-		// TODO Auto-generated method stub
+	public void C3_pintarGrafoEstaciones(IGrafo grafoEstaciones)
+	{
+		//TODO Visualizacion Mapa!
+
 	}
 
 	//-------------------------------------------------------------------------------------
 	// EXTENSIÓN
 	//-------------------------------------------------------------------------------------
 
-	@Override
 	public void generarJSON(String archivo)
 	{
 		try
 		{
+			Type tipoGrafo = new TypeToken<GrafoNoDirigido<Integer, Vertice<Double>, Double>>() {}.getType();
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			File file = new File (archivo);
 			if (!file.exists())
 				file.createNewFile();
 			FileWriter writer = new FileWriter(file);
-			gson.toJson(grafo,writer);
+			writer.write(gson.toJson(grafo,(Type) tipoGrafo));
 			writer.close();
 		}
 		catch (Exception e)
@@ -316,7 +328,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		int opcion;
 
 		//Q1
-		cargarGrafo();
+		//cargarGrafo();
 		cargarIntersecciones();
 		cargarEstaciones(stations[0]);
 		viajes = cargarViajes(trips[0]);

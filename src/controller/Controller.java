@@ -1,49 +1,67 @@
 package controller;
 
 import api.IManager;
+import model.vo.Camino;
+import model.vo.ComponenteFuertementeConectada;
+import model.vo.Estacion;
+import model.data_structures.IGrafo;
+import model.data_structures.ILista;
 import model.logic.Manager;
 
-public class Controller
+public class Controller 
 {
-	private static IManager manager = new Manager();
+	/**
+	 * modela el manejador de la clase l�gica
+	 */
+	private static IManager manager =new Manager();
 
-	public static int[] cargarDatos(String dataTrips, String dataStations)
+	//Carga El sistema
+	public static void cargarSistema()
 	{
-		return manager.cargar(dataTrips, dataStations);
+		manager.cargarSistema();
 	}
 
-	public String caminoCostoMinimo (double latI, double longI, double latF, double longF)
+	//A1
+	public static Camino A1_menorDistancia(double latInicial, double lonInicial, double latFinal, double lonFinal)
 	{
-		return manager.caminoCostoMinimo(latI, longI, latF, longF);
+		return manager.A1_menorDistancia(latInicial,lonInicial,latFinal,lonFinal);
 	}
 
-	public String caminoMasCorto (double latI, double longI, double latF, double longF)
+	//A2
+	public static Camino A2_menorNumVertices(double latInicial, double lonInicial, double latFinal, double lonFinal)
 	{
-		return manager.caminoMasCorto(latI, longI, latF, longF);
+		return manager.A2_menorNumVertices(latInicial,lonInicial,latFinal,lonFinal);
 	}
 
-	public String estacionesMasCongestionadas()
+	//B1
+	public static ILista<?, Estacion> B1_estacionesCongestionadas(int n)
 	{
-		return manager.estacionesMasCongestionadas();
+		return manager.B1_estacionesCongestionadas(n);
 	}
 
-	public String rutasEstaciones()
+	//B2
+	public static ILista<?, Camino> B2_rutasMinimas(ILista<?,Estacion> estaciones)
 	{
-		return manager.rutasEstaciones();
+		return manager.B2_rutasMinimas(estaciones);
 	}
 
-	public String crearGrafo()
+	//C1
+	public static IGrafo C1_grafoEstaciones()
 	{
-		return manager.crearGrafo();
+		IGrafo grafoEstaciones = manager.C1_grafoEstaciones();
+		manager.C1_persistirGrafoEstaciones(grafoEstaciones);
+		return grafoEstaciones;
 	}
 
-	public String componentesConectados()
+	//C2
+	public static ILista<?,ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
 	{
-		return manager.componentesConectados();
+		return manager.C2_componentesFuertementeConectados(grafo);
 	}
 
-	public void visualizarMapa()
+	//C3
+	public static void C3_pintarGrafoEstaciones(IGrafo grafoEstaciones)
 	{
-		manager.visualizarMapa();
+		manager.C3_pintarGrafoEstaciones(grafoEstaciones);
 	}
 }
