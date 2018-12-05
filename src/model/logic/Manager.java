@@ -8,8 +8,8 @@ import model.vo.Camino;
 import model.vo.ComponenteFuertementeConectada;
 import model.vo.Estacion;
 import model.vo.Interseccion;
-import model.vo.Trip;
 import model.vo.Vertice;
+import model.vo.Viaje;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -80,7 +80,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	private DoublyLinkedList <Integer, Estacion<Double>> estaciones = new DoublyLinkedList <Integer, Estacion<Double>> ();
 
-	private DoublyLinkedList <Integer,Trip> viajes = new DoublyLinkedList <Integer,Trip>();
+	private DoublyLinkedList <Integer,Viaje> viajes = new DoublyLinkedList <Integer,Viaje>();
 
 	//-------------------------------------------------------------------------------------
 	// MÉTODOS DE LA GUIA
@@ -149,9 +149,9 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		}
 	}
 
-	public DoublyLinkedList <Integer, Trip> cargarViajes (String tripsFile)
+	public DoublyLinkedList <Integer, Viaje> cargarViajes (String tripsFile)
 	{
-		DoublyLinkedList<Integer, Trip> temp = new DoublyLinkedList<Integer, Trip> ();
+		DoublyLinkedList<Integer, Viaje> temp = new DoublyLinkedList<Integer, Viaje> ();
 		int i = 1;
 		try 
 		{
@@ -181,7 +181,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 					if (linea.length > 11 && linea[11].length() > 2)
 						year = Integer.parseInt(linea [11].charAt(0) == '"'? linea[11].substring(1, linea[11].length()-1) : linea[11]);
 
-					Trip viaje = new Trip(tripId, start, end, bikeId, duration, fromStId, fromSt, toStId, toSt, tipo, genero, year);
+					Viaje viaje = new Viaje (tripId, start, end, bikeId, duration, fromStId, fromSt, toStId, toSt, tipo, genero, year);
 					temp.add(viaje);
 					l = reader.readLine();
 					i++;
@@ -233,12 +233,12 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		}		
 	}
 
-	public DibujarFiguras mostrarMapa()
+	public DibujarFiguras mostrarMapa(ILista <?,Vertice<?>> circulos, ILista <?,Vertice<?>> rectangulos, ILista <?,Camino> lineas)
 	{
 		MapViewOptions options = new MapViewOptions();
 		options.importPlaces();
 		options.setApiKey("***REMOVED***");
-		DibujarFiguras mapa = new DibujarFiguras(options, intersecciones, estaciones);
+		DibujarFiguras mapa = new DibujarFiguras(options, circulos, rectangulos, lineas);
 		return mapa;
 	}
 

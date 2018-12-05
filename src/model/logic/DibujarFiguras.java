@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2000-2017 TeamDev Ltd. All rights reserved.
- * Use is subject to Apache 2.0 license terms.
- */
 package model.logic;
 
 import com.teamdev.jxmaps.ControlPosition;
@@ -19,16 +15,9 @@ import com.teamdev.jxmaps.Circle;
 import com.teamdev.jxmaps.CircleOptions;
 import com.teamdev.jxmaps.swing.MapView;
 import model.data_structures.ILista;
-import model.vo.Estacion;
-import model.vo.Interseccion;
+import model.vo.Camino;
+import model.vo.Vertice;
 
-import java.awt.*;
-
-/**
- * This example demonstrates how to draw polygons on the map.
- *
- * @author Vitaly Eremenko
- */
 public class DibujarFiguras extends MapView
 {
 	// Atributos
@@ -37,45 +26,49 @@ public class DibujarFiguras extends MapView
 
 	Map map;
 
-	ILista <Integer, Interseccion<Double>> intersecciones;
+	ILista <?, Vertice<?>> circulos;
 
-	ILista <Integer, Estacion<Double>> estaciones;
+	ILista <?, Vertice<?>> rectangulos;
+
+	ILista <?, Camino> lineas; 
 
 	LatLngBounds bordes = new LatLngBounds (new LatLng (41.657972891282526, -87.81235055856227), new LatLng (42.063999, -87.52849012951941));
 
 	// Constructor
-	public DibujarFiguras(MapViewOptions options, ILista <Integer, Interseccion<Double>> inter, ILista <Integer, Estacion<Double>> est)
+	public DibujarFiguras(MapViewOptions options, ILista <?, Vertice<?>> circ, ILista <?, Vertice<?>> rect, ILista <?, Camino> linea)
 	{
 		super(options);
-		// Setting of a ready handler to MapView object. onMapReady will be called when map initialization is done and
-		// the map object is ready to use. Current implementation of onMapReady customizes the map object.
+
 		setOnMapReadyHandler(new MapReadyHandler()
 		{
 			@Override
 			public void onMapReady(MapStatus status)
 			{
-				// Check if the map is loaded correctly
+				//  Verifica si el mapa cargó bien
 				if (status == MapStatus.MAP_STATUS_OK)
 				{
+					// crea las instancias necesarias
 					map = getMap();
-					intersecciones = inter;
-					estaciones = est;
+					circulos = circ;
+					rectangulos = rect;
+					lineas = linea;
+
+					// Crea las opciones para el mapa
+					MapOptions mapOptions = new MapOptions();
+					// Crea controles para el mapa
+					MapTypeControlOptions controlOptions = new MapTypeControlOptions();
+					controlOptions.setPosition(ControlPosition.TOP_RIGHT);
+					mapOptions.setMapTypeControlOptions(controlOptions);
+					// Se configuran las opciones
+					map.setOptions(mapOptions);
+					// Coordenadas del centro de Chicago
+					map.setCenter(new LatLng(41.875486, -87.626570));
+					// Zoom adecuado para ver Chicago
+					map.setZoom(10.0);
+					// Se instancian las figuras a mostrar
 					rectangulo();
 					circulo();
-					// Creating a map options object
-					MapOptions mapOptions = new MapOptions();
-					// Creating a map type control options object
-					MapTypeControlOptions controlOptions = new MapTypeControlOptions();
-					// Changing position of the map type control
-					controlOptions.setPosition(ControlPosition.TOP_RIGHT);
-					// Setting map type control options
-					mapOptions.setMapTypeControlOptions(controlOptions);
-					// Setting map options
-					map.setOptions(mapOptions);
-					// Setting the map center
-					map.setCenter(new LatLng(41.875486, -87.626570));
-					// Setting initial zoom value
-					map.setZoom(9.0);
+					linea();
 				}
 			}
 		});
@@ -87,28 +80,34 @@ public class DibujarFiguras extends MapView
 	{
 		CircleOptions opciones = new CircleOptions();
 		opciones.setFillOpacity(0);
-		opciones.setStrokeColor(Color.RED.toString());
+		opciones.setStrokeColor("#CB4335"); //rojo
 		opciones.setStrokeWeight(5.0);
 
-		for (Interseccion<Double> inter: intersecciones)
+		for (Vertice<?> inter: circulos)
 		{
 			Circle circulo = new Circle(map);
-			circulo.setCenter(new LatLng(inter.darLatitud(), inter.darLongitud()));
-			circulo.setRadius(50);
+			circulo.setCenter(new LatLng(inter.darLatitud(),inter.darLongitud()));
+			circulo.setRadius(40);
 			circulo.setOptions(opciones);
 		}
 	}
+
 	public void rectangulo()
 	{
 		RectangleOptions opciones = new RectangleOptions();
 		opciones.setFillOpacity(0);
-		opciones.setStrokeColor(Color.BLUE.toString());
-		for (Estacion<Double> rect: estaciones)
+		opciones.setStrokeColor("#2E86C1  "); // azul
+		for (Vertice<?> rect: rectangulos)
 		{
 			Rectangle rectangulo = new Rectangle (map);
 			LatLngBounds bordes = new LatLngBounds (new LatLng (rect.darLatitud() - 0.0004, rect.darLongitud() - 0.0006), new LatLng (rect.darLatitud() + 0.0004, rect.darLongitud() + 0.0006));
 			rectangulo.setBounds(bordes);
 			rectangulo.setOptions(opciones);
 		}
+	}
+
+	public void linea()
+	{
+
 	}
 }

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**
  * Representation of a Trip object
  */
-public class Trip implements Comparable <Trip>
+public class Viaje implements Comparable <Viaje>
 {
 	public enum Tipo
 	{
@@ -43,10 +43,10 @@ public class Trip implements Comparable <Trip>
 
 	private int bithyear;
 
-	public Trip ()
+	public Viaje ()
 	{
 	}
-	public Trip (int tripId, LocalDateTime start, LocalDateTime end, int bikeId, int duration, int FromStId, String FromSt, int ToStId, String ToSt, String tipo, String genero, int year)
+	public Viaje (int tripId, LocalDateTime start, LocalDateTime end, int bikeId, int duration, int FromStId, String FromSt, int ToStId, String ToSt, String tipo, String genero, int year)
 	{
 		this.tripId = tripId;
 		startTime = start;
@@ -209,7 +209,7 @@ public class Trip implements Comparable <Trip>
 		this.bithyear = bithyear;
 	}
 	@Override
-	public int compareTo(Trip tri)
+	public int compareTo(Viaje tri)
 	{
 		if (tri.getBikeId() == this.bikeId)
 			return 0;
