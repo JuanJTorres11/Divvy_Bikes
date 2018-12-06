@@ -11,7 +11,6 @@ import model.vo.ComponenteFuertementeConectada;
 import model.vo.Estacion;
 import model.vo.Interseccion;
 import model.vo.Vertice;
-import model.vo.Viaje;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -77,19 +76,13 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	// Estructuras donde se cargan los archivos
 
-	GrafoNoDirigido <Integer, Vertice<Double>, Double> grafo = new GrafoNoDirigido <Integer, Vertice<Double>, Double>();
-
-	private KVLinkedList <Integer, Interseccion<Double>> intersecciones = new KVLinkedList <Integer, Interseccion<Double>> ();
-
-	private KVLinkedList <Integer, Estacion<Double>> estaciones = new KVLinkedList <Integer, Estacion<Double>> ();
-
-	private KVLinkedList <Integer,Viaje> viajes = new KVLinkedList <Integer,Viaje>();
+	GrafoNoDirigido <Integer, Vertice, Camino> grafo = new GrafoNoDirigido <Integer, Vertice, Camino>();
 
 	//-------------------------------------------------------------------------------------
 	// MÉTODOS DE LA GUIA
 	//-------------------------------------------------------------------------------------
 
-	public DibujarFiguras mostrarMapa(IKVLista <?,Vertice<?>> circulos, IKVLista <?,Vertice<?>> rectangulos, IKVLista <?,Camino> lineas)
+	public DibujarFiguras mostrarMapa(IKVLista <Integer,Vertice> circulos, IKVLista <Integer,Vertice> rectangulos, IKVLista <Integer,Camino> lineas)
 	{
 		MapViewOptions options = new MapViewOptions();
 		options.importPlaces();
@@ -100,7 +93,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	public void cargarSistema()
 	{
-		Type tipoGrafo = new TypeToken<GrafoNoDirigido<Integer, Vertice<Double>, Double>>() {}.getType();
+		Type tipoGrafo = new TypeToken<GrafoNoDirigido<Integer, Vertice, Camino>>() {}.getType();
 		Gson json = new Gson();
 		try
 		{
@@ -192,7 +185,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	{
 		try
 		{
-			Type tipoGrafo = new TypeToken<GrafoNoDirigido<Integer, Vertice<Double>, Double>>() {}.getType();
+			Type tipoGrafo = new TypeToken<GrafoNoDirigido<Integer, Vertice, Camino>>() {}.getType();
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			File file = new File (archivo);
 			if (!file.exists())

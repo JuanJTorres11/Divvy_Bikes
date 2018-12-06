@@ -1,6 +1,6 @@
 package model.vo;
 
-public class Interseccion <A> implements Vertice <A>
+public class Interseccion implements Vertice
 {
 	// Atributos
 
@@ -10,7 +10,6 @@ public class Interseccion <A> implements Vertice <A>
 
 	private double longitud;
 
-	private A informacionArco;
 
 	// Constructor
 
@@ -19,13 +18,6 @@ public class Interseccion <A> implements Vertice <A>
 		this.id = id;
 		this.latitud = latitud;
 		this.longitud = longitud;
-		informacionArco = null;
-	}
-
-	public Interseccion (int id, A info)
-	{
-		this.id = id;
-		informacionArco = info;
 	}
 
 	// Métodos
@@ -79,16 +71,5 @@ public class Interseccion <A> implements Vertice <A>
 	public void cambiarLongitud(double longitude)
 	{
 		longitud = longitude;
-	}
-
-	public A darInformaciónArco()
-	{
-		return informacionArco;
-	}
-
-	@Override
-	public void cambiarInformacionArco(A info)
-	{
-		informacionArco = info;
 	}
 }
