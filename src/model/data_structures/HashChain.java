@@ -2,7 +2,7 @@ package model.data_structures;
 
 import java.util.Iterator;
 
-public class HashChain <K extends Comparable<K>, V> implements IHash<K,V>, Iterable
+public class HashChain <K extends Comparable<K>, V> implements IHash<K,V>, Iterable<V>
 {
 	private int capacidad;
 
@@ -10,14 +10,15 @@ public class HashChain <K extends Comparable<K>, V> implements IHash<K,V>, Itera
 
 	private static final int factorCarga = 5;
 
-	private DoublyLinkedList <K,V>[] lista;
+	private KVLinkedList <K,V>[] lista;
 
+	@SuppressWarnings("unchecked")
 	public HashChain (int capacidad)
 	{
 		this.capacidad = capacidad;
-		lista = new DoublyLinkedList [capacidad];
+		lista = new KVLinkedList [capacidad];
 		for (int i = 0; i < capacidad; i++)
-			lista[i] = new DoublyLinkedList();
+			lista[i] = new KVLinkedList<K,V>();
 		numeroElementos = 0;
 	}
 
@@ -51,8 +52,8 @@ public class HashChain <K extends Comparable<K>, V> implements IHash<K,V>, Itera
 	{
 		V value = null;
 		boolean encontrado = false;
-		DoublyLinkedList <K,V> tmp = lista[hash(key)];
-		Node <K,V> iter = tmp.getFirst();
+		KVLinkedList <K,V> tmp = lista[hash(key)];
+		KVNode <K,V> iter = tmp.getFirst();
 		while (iter != null && !encontrado)
 		{
 			if (iter.darLlave().equals(key))
@@ -70,8 +71,8 @@ public class HashChain <K extends Comparable<K>, V> implements IHash<K,V>, Itera
 	{
 		V value = null;
 		boolean encontrado = false;
-		DoublyLinkedList <K,V> tmp = lista[hash(key)];
-		Node <K,V> iter = tmp.getFirst();
+		KVLinkedList <K,V> tmp = lista[hash(key)];
+		KVNode <K,V> iter = tmp.getFirst();
 		int i = 0;
 		while (iter != null && !encontrado)
 		{
@@ -98,7 +99,7 @@ public class HashChain <K extends Comparable<K>, V> implements IHash<K,V>, Itera
 		HashChain<K, V> temp = new HashChain<K, V> (capacidad);
 		for (int i = 0; i < capacidad / 2; i++)
 		{
-			Node <K,V> iter = lista[i].getFirst();
+			KVNode <K,V> iter = lista[i].getFirst();
 			while (iter != null)
 			{
 				temp.put(iter.darLlave(), iter.darValor());
@@ -114,24 +115,17 @@ public class HashChain <K extends Comparable<K>, V> implements IHash<K,V>, Itera
 	}
 
 	@Override
-	public Iterator iterator()
+	public Iterator<V> iterator()
 	{
-		DoublyLinkedList<K, V> temp = new DoublyLinkedList<K,V>();
+		KVLinkedList<K, V> temp = new KVLinkedList<K,V>();
 		for(int i = 0; i < lista.length; i++)
 			temp.concat(lista[i]);
 		return temp.iterator();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void clear()
 	{
-		lista = new DoublyLinkedList [capacidad];
-	}
-
-	@Override
-	public Iterator iterador() {
-		DoublyLinkedList<K, V> temp = new DoublyLinkedList<K,V>();
-		for(int i = 0; i < lista.length; i++)
-			temp.concat(lista[i]);
-		return temp.iterator();
+		lista = new KVLinkedList [capacidad];
 	}
 }

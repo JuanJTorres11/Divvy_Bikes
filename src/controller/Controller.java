@@ -5,7 +5,7 @@ import model.vo.Camino;
 import model.vo.ComponenteFuertementeConectada;
 import model.vo.Estacion;
 import model.data_structures.IGrafo;
-import model.data_structures.ILista;
+import model.data_structures.IKVLista;
 import model.logic.Manager;
 
 public class Controller 
@@ -34,13 +34,13 @@ public class Controller
 	}
 
 	//B1
-	public static ILista<?, Estacion> B1_estacionesCongestionadas(int n)
+	public static IKVLista<?, Estacion> B1_estacionesCongestionadas(int n)
 	{
 		return manager.B1_estacionesCongestionadas(n);
 	}
 
 	//B2
-	public static ILista<?, Camino> B2_rutasMinimas(ILista<?,Estacion> estaciones)
+	public static IKVLista<?, Camino> B2_rutasMinimas(IKVLista<?,Estacion> estaciones)
 	{
 		return manager.B2_rutasMinimas(estaciones);
 	}
@@ -54,7 +54,7 @@ public class Controller
 	}
 
 	//C2
-	public static ILista<?,ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
+	public static IKVLista<?,ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
 	{
 		return manager.C2_componentesFuertementeConectados(grafo);
 	}

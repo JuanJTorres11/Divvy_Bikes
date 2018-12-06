@@ -2,7 +2,7 @@ package model.data_structures;
 
 import java.io.Serializable;
 
-public class Node <K,V> implements Serializable
+public class KVNode <K,V> implements Serializable
 {
 	/**
 	 * Constante de serialización
@@ -22,35 +22,28 @@ public class Node <K,V> implements Serializable
 	/**
 	 * Siguiente nodo.
 	 */
-	private Node <K,V> siguiente;
-
-	/**
-	 * Nodo anterior.
-	 */
-	private Node<K,V> anterior;
+	private KVNode <K,V> siguiente;
 
 	/**
 	 * Método constructor del nodo doblemente encadenado
 	 * @param elemento elemento que se almacenará en el nodo.
 	 */
-	public Node(V elemento) 
+	public KVNode(V elemento) 
 	{
 		valor = elemento;
 		llave = null;
 		siguiente = null;
-		anterior = null;
 	}
 
 	/**
 	 * Método constructor del nodo doblemente encadenado
 	 * @param elemento elemento que se almacenará en el nodo.
 	 */
-	public Node(K key, V elemento) 
+	public KVNode(K key, V elemento) 
 	{
 		valor = elemento;
 		llave = key;
 		siguiente = null;
-		anterior = null;
 	}
 
 	/**
@@ -85,27 +78,9 @@ public class Node <K,V> implements Serializable
 	 * Método que retorna el siguiente nodo.
 	 * @return Siguiente nodo
 	 */
-	public Node <K,V> darSiguiente()
+	public KVNode <K,V> darSiguiente()
 	{
 		return siguiente;
-	}
-
-	/**
-	 * Método que retorna el nodo anterior.
-	 * @return Nodo anterior.
-	 */
-	public Node <K,V> darAnterior()
-	{
-		return anterior;
-	}
-
-	/**
-	 * Método que cambia el nodo anterior por el que llega como parámetro.
-	 * @param anterior Nuevo nodo anterior.
-	 */
-	public void cambiarAnterior(Node <K,V> anterior)
-	{
-		this.anterior = anterior;
 	}
 
 	/**
@@ -113,7 +88,7 @@ public class Node <K,V> implements Serializable
 	 * <b>post: </b> Se ha cambiado el siguiente nodo
 	 * @param siguiente El nuevo siguiente nodo
 	 */
-	public void cambiarSiguiente(Node<K,V> siguiente)
+	public void cambiarSiguiente(KVNode<K,V> siguiente)
 	{
 		this.siguiente = siguiente;
 	}

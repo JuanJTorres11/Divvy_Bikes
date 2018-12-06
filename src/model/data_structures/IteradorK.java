@@ -9,7 +9,6 @@ import java.util.Iterator;
  */
 public class IteradorK <K,V> implements Iterator<K>, Serializable 
 {
-
 	/**
 	 * Constante de serialización
 	 */
@@ -18,13 +17,13 @@ public class IteradorK <K,V> implements Iterator<K>, Serializable
 	/**
 	 * El nodo donde se encuentra el iterador.
 	 */
-	private Node <K,V> actual;
+	private KVNode <K,V> actual;
 
 	/**
 	 * Constructor iterador.
 	 * @param primerNodo
 	 */
-	public IteradorK(Node <K,V> primerNodo) 
+	public IteradorK(KVNode <K,V> primerNodo) 
 	{
 		actual = primerNodo;
 	}

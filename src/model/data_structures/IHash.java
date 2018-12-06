@@ -32,5 +32,5 @@ public interface IHash <K extends Comparable<K>, V>
 	/**
 	 * @return  Conjunto	de	llaves	K	presentes	en	la	tabla
 	 */
-	public Iterator	iterador();
+	public Iterator	iterator();
 }

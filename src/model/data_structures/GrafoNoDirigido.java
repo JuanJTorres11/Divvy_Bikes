@@ -11,13 +11,13 @@ public class GrafoNoDirigido <K extends Comparable <K>, V extends Vertice<A>, A 
 
 	private int arcos;
 
-	HashChain <K,DoublyLinkedList<K,V>>listaAdyacencia;
+	HashChain <K,KVLinkedList<K,V>>listaAdyacencia;
 
 	public GrafoNoDirigido ()
 	{
 		vertices = 0;
 		arcos = 0;
-		listaAdyacencia = new HashChain <K, DoublyLinkedList<K,V>>(80000);
+		listaAdyacencia = new HashChain <K, KVLinkedList<K,V>>(80000);
 	}
 	@Override
 	public int V()
@@ -34,11 +34,12 @@ public class GrafoNoDirigido <K extends Comparable <K>, V extends Vertice<A>, A 
 	@Override
 	public void addVertex(K idVertex, V infoVertex)
 	{
-		DoublyLinkedList<K,V> temp = new DoublyLinkedList <K,V>(idVertex, infoVertex);
+		KVLinkedList<K,V> temp = new KVLinkedList <K,V>(idVertex, infoVertex);
 		listaAdyacencia.put(idVertex, temp);
 		vertices++;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addEdge(K idVertexIni, K idVertexFin, A infoArc)
 	{

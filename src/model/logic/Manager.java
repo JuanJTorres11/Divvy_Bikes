@@ -1,9 +1,9 @@
 package model.logic;
 
-import model.data_structures.DoublyLinkedList;
+import model.data_structures.KVLinkedList;
 import model.data_structures.GrafoNoDirigido;
 import model.data_structures.IGrafo;
-import model.data_structures.ILista;
+import model.data_structures.IKVLista;
 import model.vo.Camino;
 import model.vo.ComponenteFuertementeConectada;
 import model.vo.Estacion;
@@ -58,7 +58,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	public static final String ARCOS = "data" + File.separator + "Adjacency_list_of_Chicago_Street_Lines.txt";
 
 	//Ruta del grafo
-	public static final String GRAFO = "data" + File.separator + "test.json";
+	public static final String GRAFO = "data" + File.separator + "grafo.json";
 
 	//-------------------------------------------------------------------------------------
 	// ATRIBUTOS
@@ -76,164 +76,17 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	GrafoNoDirigido <Integer, Vertice<Double>, Double> grafo = new GrafoNoDirigido <Integer, Vertice<Double>, Double>();
 
-	private DoublyLinkedList <Integer, Interseccion<Double>> intersecciones = new DoublyLinkedList <Integer, Interseccion<Double>> ();
+	private KVLinkedList <Integer, Interseccion<Double>> intersecciones = new KVLinkedList <Integer, Interseccion<Double>> ();
 
-	private DoublyLinkedList <Integer, Estacion<Double>> estaciones = new DoublyLinkedList <Integer, Estacion<Double>> ();
+	private KVLinkedList <Integer, Estacion<Double>> estaciones = new KVLinkedList <Integer, Estacion<Double>> ();
 
-	private DoublyLinkedList <Integer,Viaje> viajes = new DoublyLinkedList <Integer,Viaje>();
+	private KVLinkedList <Integer,Viaje> viajes = new KVLinkedList <Integer,Viaje>();
 
 	//-------------------------------------------------------------------------------------
 	// MÉTODOS DE LA GUIA
 	//-------------------------------------------------------------------------------------
 
-	public void cargarIntersecciones()
-	{
-		int i = 0;
-		// Carga de vertices
-		try
-		{
-			FileReader lector = new FileReader(INTERSECCIONES);
-			BufferedReader reader = new BufferedReader (lector);
-			String l = reader.readLine();
-			while (l != null)
-			{
-				String [] linea = l.split(",");
-				int id = Integer.parseInt(linea[0]);
-				double latitud = Double.parseDouble(linea[2]);
-				double longitud = Double.parseDouble(linea[1]);
-				Interseccion<Double> inter = new Interseccion<Double> (id, latitud, longitud);
-				intersecciones.add(id, inter);
-				i ++;
-				if (i == 1)
-				{
-					latMin = latitud;
-					latMax = latitud;
-					longMin = longitud;
-					longMax = longitud;
-				}
-				else
-				{
-					if (latitud < latMin)
-						latMin = latitud;
-					else if (latitud > latMax)
-						latMax = latitud;
-					if (longitud < longMin)
-						longMin = longitud;
-					else if (longitud > longMax)
-						longMax = longitud;
-				}
-				l = reader.readLine();
-			}
-			reader.close();
-			lector.close();
-		}
-		catch (Exception e)
-		{
-			System.out.println("Hubo un problema al leer las interseciones, en la linea: " + i + "el mensaje es: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	public void cargarGrafo ()
-	{
-		TypeToken <GrafoNoDirigido<Integer, Vertice<Double>, Double>> tipoGrafo = (TypeToken<GrafoNoDirigido<Integer, Vertice<Double>, Double>>) new TypeToken<GrafoNoDirigido<Integer, Vertice<Double>, Double>>() {}.getType();
-		Gson json = new Gson();
-		try
-		{
-			grafo = json.fromJson(new FileReader(GRAFO), (Type) tipoGrafo);
-		}
-		catch (Exception e)
-		{
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	public DoublyLinkedList <Integer, Viaje> cargarViajes (String tripsFile)
-	{
-		DoublyLinkedList<Integer, Viaje> temp = new DoublyLinkedList<Integer, Viaje> ();
-		int i = 1;
-		try 
-		{
-			FileReader lector = new FileReader(tripsFile);
-			BufferedReader reader = new BufferedReader (lector);
-			reader.readLine();
-			String l = reader.readLine();
-			while (l != null  )
-			{
-				String [] linea = l.split(",");
-				int tripId = Integer.parseInt(linea[0].charAt(0) == '"'? linea[0].substring(1, linea[0].length()-1) : linea[0]);
-				String [] ini = (linea [1].charAt(0) == '"'? linea[1].substring(1, linea[1].length()-1) : linea[1]).split(" ");
-				String [] fin = (linea [2].charAt(0) == '"'? linea[2].substring(1, linea[2].length()-1) : linea[2]).split(" ");
-				LocalDateTime start = convertirFecha_Hora_LDT(ini [0], ini[1]);
-				LocalDateTime end = convertirFecha_Hora_LDT(fin[0], fin[1]);
-				int bikeId = Integer.parseInt(linea [3].charAt(0) == '"'? linea[3].substring(1, linea[3].length()-1) : linea[3]);
-				int duration = Integer.parseInt(linea [4].charAt(0) == '"'? linea[4].substring(1, linea[4].length()-1) : linea[4]);
-				int fromStId = Integer.parseInt(linea [5].charAt(0) == '"'? linea[5].substring(1, linea[5].length()-1) : linea[5]);
-				String fromSt = linea [6].charAt(0) == '"'? linea[6].substring(1, linea[6].length()-1) : linea[6];
-				int toStId = Integer.parseInt(linea [7].charAt(0) == '"'? linea[7].substring(1, linea[7].length()-1) : linea[7]);
-				String toSt = linea [8].charAt(0) == '"'? linea[8].substring(1, linea[8].length()-1) : linea[8];
-				String tipo = linea [9].equals("\"Dependent\"")? "Subscriber" : linea[9].charAt(0) == '"'? linea [9].substring(1, linea[9].length()-1) : linea[9];
-				String genero = null;
-				int year = 0;
-				if (linea.length > 10 && linea[10].length() > 2)
-					genero = linea [10].charAt(0) == '"'? linea[10].substring(1, linea[10].length()-1) : linea[10];
-					if (linea.length > 11 && linea[11].length() > 2)
-						year = Integer.parseInt(linea [11].charAt(0) == '"'? linea[11].substring(1, linea[11].length()-1) : linea[11]);
-
-					Viaje viaje = new Viaje (tripId, start, end, bikeId, duration, fromStId, fromSt, toStId, toSt, tipo, genero, year);
-					temp.add(viaje);
-					l = reader.readLine();
-					i++;
-			}
-			reader.close();
-			lector.close();
-		}
-		catch (Exception e)
-		{
-			System.out.println("Murio en: " + i + " cargando " + tripsFile);
-			e.printStackTrace();
-		}
-		return temp;
-	}
-
-	public void cargarEstaciones(String ruta)
-	{
-		int i = 0;
-		try 
-		{
-			FileReader lector = new FileReader(ruta);
-			BufferedReader reader = new BufferedReader (lector);
-			reader.readLine();
-			String l = reader.readLine();
-			while (l != null)
-			{
-				String [] linea = l.split(",");
-				int id = Integer.parseInt(linea[0].charAt(0) == '"'? linea[0].substring(1, linea[0].length()-1) : linea[0]);
-				String nombre = linea[1].charAt(0) == '"'? linea[1].substring(1, linea[1].length()-1) : linea[1];
-				double latitud = Double.parseDouble(linea[3].charAt(0) == '"'? linea[3].substring(1, linea[3].length()-1) : linea[3]);
-				double longitud = Double.parseDouble(linea[4].charAt(0) == '"'? linea[4].substring(1, linea[4].length()-1) : linea[4]);
-				int capacidad = Integer.parseInt(linea[5].charAt(0) == '"'? linea[5].substring(1, linea[5].length()-1) : linea[5]);
-				String [] date = (linea[6].charAt(0) == '"'? linea[6].substring(1, linea[6].length()-1) : linea[6]).split(" ");
-				LocalDateTime fecha = convertirFecha_Hora_LDT(date [0], date[1]);
-
-				Estacion<Double> station = new Estacion<Double>(id, nombre, latitud, longitud, capacidad, fecha);
-				grafo.addVertex(id, station);
-				estaciones.add(id, station);
-				l = reader.readLine();
-				i++;
-			}
-			reader.close();
-			lector.close();
-		}
-		catch (Exception e)
-		{
-			System.out.println("Hubo un problema al leer las estaciones, en la linea: " + i + " \n el mensaje es: " + e.getMessage());
-			e.printStackTrace();
-		}		
-	}
-
-	public DibujarFiguras mostrarMapa(ILista <?,Vertice<?>> circulos, ILista <?,Vertice<?>> rectangulos, ILista <?,Camino> lineas)
+	public DibujarFiguras mostrarMapa(IKVLista <?,Vertice<?>> circulos, IKVLista <?,Vertice<?>> rectangulos, IKVLista <?,Camino> lineas)
 	{
 		MapViewOptions options = new MapViewOptions();
 		options.importPlaces();
@@ -244,7 +97,17 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	public void cargarSistema()
 	{
-		// TODO Auto-generated method stub
+		Type tipoGrafo = new TypeToken<GrafoNoDirigido<Integer, Vertice<Double>, Double>>() {}.getType();
+		Gson json = new Gson();
+		try
+		{
+			grafo = json.fromJson(new FileReader(GRAFO), (Type) tipoGrafo);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	public Camino A1_menorDistancia(double latInicial, double lonInicial, double latFinal, double lonFinal)
@@ -259,13 +122,13 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		return null;
 	}
 
-	public ILista<?, Estacion> B1_estacionesCongestionadas(int n)
+	public IKVLista<?, Estacion> B1_estacionesCongestionadas(int n)
 	{
 		//TODO Visualizacion Mapa
 		return null;
 	}
 
-	public ILista<?, Camino> B2_rutasMinimas(ILista<?, Estacion> stations)
+	public IKVLista<?, Camino> B2_rutasMinimas(IKVLista<?, Estacion> stations)
 	{
 		//TODO Visualizacion Mapa
 		return null;
@@ -282,7 +145,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		//TODO Visualizacion Mapa
 	}
 
-	public ILista<?, ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
+	public IKVLista<?, ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
 	{
 		//TODO Visualizacion Mapa
 		return null;
@@ -319,56 +182,6 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	}
 
 	private static final int RADIO_TIERRA = 6371;
-
-	public int [] cargar(String rutaTrips, String rutaStations)
-	{
-		String [] trips = rutaTrips.split(":");
-		String [] stations = rutaStations.split(":");
-		Scanner linea = new Scanner(System.in);
-		int opcion;
-
-		//Q1
-		//cargarGrafo();
-		cargarIntersecciones();
-		cargarEstaciones(stations[0]);
-		viajes = cargarViajes(trips[0]);
-		System.out.println("Se cargaron: " + viajes.size() + " viajes.");
-		System.out.println("Se cargó la información de Q1 correctamente");
-
-		//Q2
-		System.out.println("¿Quiere cargar la información de Q2? \n Responda 1 para sí");
-		opcion = linea.nextInt();
-		if (opcion == 1)
-		{
-			viajes.concat(cargarViajes(trips[1]));
-			System.out.println("Se cargaron: " + viajes.size() + " viajes.");
-			System.out.println("Se cargó la información de Q2 correctamente");
-		}
-
-		//Q3
-		System.out.println("¿Quiere cargar la información de Q3? \n Responda 1 para sí");
-		opcion = linea.nextInt();
-		if (opcion == 1)
-		{
-			cargarEstaciones(stations[1]);
-			viajes.concat(cargarViajes(trips[2]));
-			System.out.println("Se cargaron: " + viajes.size() + " viajes.");
-			System.out.println("Se cargó la información de Q3 correctamente");
-		}
-
-		//Q4
-		System.out.println("¿Quiere cargar la información de Q4? \n Responda 1 para sí o 0 para no");
-		opcion = linea.nextInt();
-		if (opcion == 1)
-		{
-			viajes.concat(cargarViajes(trips[3]));
-			System.out.println("Se cargaron: " + viajes.size() + " viajes.");
-			System.out.println("Se cargó la información de Q4 correctamente");
-		}
-
-		int [] i = {viajes.size(), estaciones.size(), };
-		return i;
-	}
 
 	private static double distancia (double startLat, double startLong, double endLat, double endLong)
 	{

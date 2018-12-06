@@ -7,7 +7,7 @@ package model.data_structures;
  * next, previous
  * @param <E>
  */
-public interface ILista <K,V> extends Iterable<V>
+public interface IKVLista <K,V> extends Iterable<V>
 {
 	public boolean addAtEnd(V elem);
 
@@ -23,5 +23,5 @@ public interface ILista <K,V> extends Iterable<V>
 
 	public boolean add(V e);
 
-	Node<K, V> getFirst();
+	KVNode<K, V> getFirst();
 }
