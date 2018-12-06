@@ -112,7 +112,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		Estacion estacionInicio=EstacionMasCercana(latInicial, lonInicial);
 		Estacion estacionFin=EstacionMasCercana(latFinal, lonFinal);
 		KVLinkedList<Integer, Vertice> listcam= dijkstra(estacionInicio, estacionFin);
-		Camino camResp= new Camino(estacionInicio.darId(), estacionFin.darId(), );
+		Camino camResp= new Camino(estacionInicio.darId(), estacionFin.darId(),0);
 		return camResp;
 
 	}
@@ -310,7 +310,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 
 		KVLinkedList<Integer,Vertice> listVertVisitados = new  KVLinkedList<Integer,Vertice>();
-
+		return listVertVisitados;
 
 	}
 

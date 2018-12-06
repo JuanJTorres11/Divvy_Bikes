@@ -24,6 +24,13 @@ public class Camino implements Comparable<Camino>
 		peso = w;
 	}
 
+	public Camino ()
+	{
+		idInicio = 0;
+		idFin = 0;
+		peso = 0;
+	}
+
 	/**
 	 * @return the inicio
 	 */

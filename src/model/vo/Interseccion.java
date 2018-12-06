@@ -20,6 +20,13 @@ public class Interseccion implements Vertice
 		this.longitud = longitud;
 	}
 
+	public Interseccion ()
+	{
+		id = 0;
+		latitud = 0;
+		longitud = 0;
+	}
+
 	// Métodos
 
 	/**

@@ -8,9 +8,9 @@ public class Estacion implements Comparable <Estacion>, Vertice
 	private String nombre;
 
 	private int cantidadViajesIn;
-	
+
 	private int cantidadViajesOut;
-	
+
 	private double latitud;
 
 	private double longitud;
@@ -31,6 +31,18 @@ public class Estacion implements Comparable <Estacion>, Vertice
 		this.longitud = longitud;
 		this.capacidad = capacidad;
 		fechaInicio = fecha;
+		numeroViajes = 0;
+	}
+
+	public Estacion()
+	{
+		id = 0;
+		nombre = null;
+		cantidadViajesIn = 0;
+		cantidadViajesOut = 0;
+		latitud = 0;
+		longitud = 0;
+		fechaInicio = null;
 		numeroViajes = 0;
 	}
 
@@ -123,12 +135,12 @@ public class Estacion implements Comparable <Estacion>, Vertice
 	{
 		cantidadViajesIn++;
 	}
-	
+
 	public void cambiarCantidadViajesOut()
 	{
 		cantidadViajesOut++;
 	}
-	
+
 	/**
 	 * @param latitude the latitude to set
 	 */
