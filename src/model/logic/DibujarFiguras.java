@@ -16,9 +16,11 @@ import com.teamdev.jxmaps.CircleOptions;
 import com.teamdev.jxmaps.swing.MapView;
 import model.data_structures.IKVLista;
 import model.vo.Camino;
+import model.vo.Estacion;
+import model.vo.Interseccion;
 import model.vo.Vertice;
 
-public class DibujarFiguras extends MapView
+public class DibujarFiguras <V extends Vertice> extends MapView
 {
 	// Atributos
 
@@ -26,16 +28,16 @@ public class DibujarFiguras extends MapView
 
 	Map map;
 
-	IKVLista <?, Vertice<?>> circulos;
+	IKVLista <Integer, V> circulos;
 
-	IKVLista <?, Vertice<?>> rectangulos;
+	IKVLista <Integer, V> rectangulos;
 
-	IKVLista <?, Camino> lineas; 
+	IKVLista <Integer, Camino> lineas; 
 
 	LatLngBounds bordes = new LatLngBounds (new LatLng (41.657972891282526, -87.81235055856227), new LatLng (42.063999, -87.52849012951941));
 
 	// Constructor
-	public DibujarFiguras(MapViewOptions options, IKVLista <?, Vertice<?>> circ, IKVLista <?, Vertice<?>> rect, IKVLista <?, Camino> linea)
+	public DibujarFiguras(MapViewOptions options, IKVLista <Integer, V> circ, IKVLista <Integer, V> rect, IKVLista <Integer, Camino> linea)
 	{
 		super(options);
 
@@ -83,7 +85,7 @@ public class DibujarFiguras extends MapView
 		opciones.setStrokeColor("#CB4335"); //rojo
 		opciones.setStrokeWeight(5.0);
 
-		for (Vertice<?> inter: circulos)
+		for (Vertice inter: circulos)
 		{
 			Circle circulo = new Circle(map);
 			circulo.setCenter(new LatLng(inter.darLatitud(),inter.darLongitud()));
@@ -97,7 +99,7 @@ public class DibujarFiguras extends MapView
 		RectangleOptions opciones = new RectangleOptions();
 		opciones.setFillOpacity(0);
 		opciones.setStrokeColor("#2E86C1  "); // azul
-		for (Vertice<?> rect: rectangulos)
+		for (Vertice rect: rectangulos)
 		{
 			Rectangle rectangulo = new Rectangle (map);
 			LatLngBounds bordes = new LatLngBounds (new LatLng (rect.darLatitud() - 0.0004, rect.darLongitud() - 0.0006), new LatLng (rect.darLatitud() + 0.0004, rect.darLongitud() + 0.0006));

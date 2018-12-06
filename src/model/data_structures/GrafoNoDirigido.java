@@ -2,23 +2,27 @@ package model.data_structures;
 
 import java.util.Iterator;
 
-import model.vo.Interseccion;
+import model.vo.Camino;
 import model.vo.Vertice;
 
-public class GrafoNoDirigido <K extends Comparable <K>, V extends Vertice<A>, A > implements IGrafo<K, V, A>
+public class GrafoNoDirigido <K extends Comparable <K>, V extends Vertice, A extends Camino> implements IGrafo<K, V, A>
 {
 	private int vertices;
 
 	private int arcos;
 
-	HashChain <K,KVLinkedList<K,V>>listaAdyacencia;
+	private HashChain <K,KVLinkedList<K,A>> listaAdyacencia;
 
-	public GrafoNoDirigido ()
+	private HashChain <K,V> infoVertices;
+
+	public GrafoNoDirigido()
 	{
 		vertices = 0;
 		arcos = 0;
-		listaAdyacencia = new HashChain <K, KVLinkedList<K,V>>(80000);
+		listaAdyacencia = new HashChain <K, KVLinkedList<K,A>>(70000);
+		infoVertices = new HashChain <K,V> (70000);
 	}
+
 	@Override
 	public int V()
 	{
@@ -34,42 +38,44 @@ public class GrafoNoDirigido <K extends Comparable <K>, V extends Vertice<A>, A 
 	@Override
 	public void addVertex(K idVertex, V infoVertex)
 	{
-		KVLinkedList<K,V> temp = new KVLinkedList <K,V>(idVertex, infoVertex);
+		KVLinkedList<K,A> temp = new KVLinkedList <K,A>();
 		listaAdyacencia.put(idVertex, temp);
+		infoVertices.put(idVertex, infoVertex);
 		vertices++;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void addEdge(K idVertexIni, K idVertexFin, A infoArc)
 	{
-		listaAdyacencia.get(idVertexIni).add(idVertexFin, (V) new Interseccion<A>((int) idVertexFin,infoArc));
-		listaAdyacencia.get(idVertexFin).add(idVertexIni, (V) new Interseccion<A>((int) idVertexIni,infoArc));
+		KVLinkedList<K,A> temp = listaAdyacencia.get(idVertexIni);
+		temp.add(idVertexFin, infoArc);
+		temp = listaAdyacencia.get(idVertexFin);
+		temp.add(idVertexIni, infoArc);
 		arcos++;
 	}
 
 	@Override
 	public V getInfoVertex(K idVertex)
 	{
-		return listaAdyacencia.get(idVertex).getFirst().darValor();
+		return infoVertices.get(idVertex);
 	}
 
 	@Override
 	public void setInfoVertex(K idVertex, V infoVertex)
 	{
-		listaAdyacencia.get(idVertex).getFirst().cambiarElemento(idVertex, infoVertex);
+		infoVertices.put(idVertex, infoVertex);
 	}
 
 	@Override
 	public A getInfoArc(K idVertexIni, K idVertexFin)
 	{
-		return listaAdyacencia.get(idVertexIni).get(idVertexFin).darValor().darInformaciónArco();
+		return listaAdyacencia.get(idVertexIni).get(idVertexFin).darValor();
 	}
 
 	@Override
 	public void setInfoArc(K idVertexIni, K idVertexFin, A infoArc)
 	{
-		listaAdyacencia.get(idVertexIni).get(idVertexFin).darValor().cambiarInformacionArco(infoArc);
+		listaAdyacencia.get(idVertexIni).get(idVertexFin).cambiarElemento(idVertexFin, infoArc);
 	}
 
 	@Override
