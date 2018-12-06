@@ -5,10 +5,11 @@ import model.vo.Camino;
 public class Kruskal
 {
 	private Cola<Camino> mst;
+
 	public Kruskal(GrafoNoDirigido G)
 	{
 		mst = new Cola<Camino>();
-		MinHeapCP<Camino> pq = new MinHeapCP<Camino>(G.arcos());
+		MinHeapCP<Camino> pq = new MinHeapCP<Camino>((IKVLista)G.arcos());
 		UnionFind uf = new UnionFind(G.V());
 		while (!pq.esVacia() && mst.size() < G.V()-1)
 		{
@@ -23,9 +24,5 @@ public class Kruskal
 	public Iterable<Camino> edges()
 	{
 		return mst;
-	}
-	public double weight()
-	{
-		// See Exercise 4.3.31.
 	}
 }
