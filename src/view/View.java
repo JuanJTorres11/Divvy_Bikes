@@ -16,7 +16,7 @@ public class View
 {
 	public static void main(String[] args) 
 	{
-		IKVLista<?,Estacion> lista1B = null;
+		IKVLista<Integer,Estacion> lista1B = null;
 		IGrafo grafo1C = new GrafoNoDirigido();
 		Scanner sc = new Scanner(System.in);
 		boolean fin=false;
@@ -156,8 +156,8 @@ public class View
 
 			case 5: //2B
 
-				IKVLista<?,Estacion> estaciones = lista1B;
-				IKVLista<?,Camino> lista2B = Controller.B2_rutasMinimas(estaciones);
+				IKVLista<Integer,Estacion> estaciones = lista1B;
+				IKVLista<Integer,Camino> lista2B = Controller.B2_rutasMinimas(estaciones);
 
 				System.out.println("Informacion rutas minimas ");
 				for (int i = 0; lista2B != null && i < lista2B.size(); i++) 
@@ -188,7 +188,7 @@ public class View
 
 			case 7: //2C
 
-				IKVLista <?, ComponenteFuertementeConectada> compFuertesConectadas = Controller.C2_componentesFuertementeConectados(grafo1C);
+				IKVLista <Integer, ComponenteFuertementeConectada> compFuertesConectadas = Controller.C2_componentesFuertementeConectados(grafo1C);
 
 				// TODO Mostrar la informacion de cada componente fuertemente conectada (segun enunciado)
 				System.out.println("Total componentes conectadas :");

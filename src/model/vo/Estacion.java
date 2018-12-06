@@ -135,9 +135,9 @@ public class Estacion implements Comparable <Estacion>, Vertice
 	@Override
 	public int compareTo(Estacion est)
 	{
-		if (est.id == this.id)
+		if (est.numeroViajes == numeroViajes)
 			return 0;
-		else if (this.id < est.id)
+		else if (numeroViajes < est.numeroViajes)
 			return -1;
 		else
 			return 1;

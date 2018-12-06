@@ -34,13 +34,13 @@ public class Controller
 	}
 
 	//B1
-	public static IKVLista<?, Estacion> B1_estacionesCongestionadas(int n)
+	public static IKVLista<Integer, Estacion> B1_estacionesCongestionadas(int n)
 	{
 		return manager.B1_estacionesCongestionadas(n);
 	}
 
 	//B2
-	public static IKVLista<?, Camino> B2_rutasMinimas(IKVLista<?,Estacion> estaciones)
+	public static IKVLista<Integer, Camino> B2_rutasMinimas(IKVLista<Integer,Estacion> estaciones)
 	{
 		return manager.B2_rutasMinimas(estaciones);
 	}
@@ -54,7 +54,7 @@ public class Controller
 	}
 
 	//C2
-	public static IKVLista<?,ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
+	public static IKVLista<Integer,ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
 	{
 		return manager.C2_componentesFuertementeConectados(grafo);
 	}

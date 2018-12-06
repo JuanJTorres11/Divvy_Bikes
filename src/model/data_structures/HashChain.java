@@ -123,6 +123,14 @@ public class HashChain <K extends Comparable<K>, V> implements IHash<K,V>, Itera
 		return temp.iterator();
 	}
 
+	public Iterator<K> iteratorK()
+	{
+		KVLinkedList<K, V> temp = new KVLinkedList<K,V>();
+		for(int i = 0; i < lista.length; i++)
+			temp.concat(lista[i]);
+		return temp.iteradorK();
+	}
+
 	@SuppressWarnings("unchecked")
 	public void clear()
 	{

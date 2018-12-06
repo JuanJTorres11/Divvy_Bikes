@@ -33,13 +33,13 @@ public interface IManager
 	 * @param n. El número de estaciones
 	 * @return Una lista de las n estaciones más congestionadas
 	 */
-	public IKVLista<?, Estacion> B1_estacionesCongestionadas(int n);
+	public IKVLista<Integer, Estacion> B1_estacionesCongestionadas(int n);
 
 	/**
 	 * Retorna una lista con las rutas mínimas (con criterio distancia harvesiana) que conecten las n estaciones encontradas.
 	 * @return Una lista con las rutas encontradas.
 	 */
-	public IKVLista<?, Camino> B2_rutasMinimas(IKVLista<?, Estacion> stations);
+	public IKVLista<Integer, Camino> B2_rutasMinimas(IKVLista<Integer, Estacion> stations);
 
 	/**
 	 * Crea un Grafo Dirigido tomando como vértices únicamente los nodos estación y como arcos los viajes de bicicletas entre las mismas.
@@ -59,7 +59,7 @@ public interface IManager
 	 * @param grafo grafo dirigido para calcular componentes fuertemente conectadas
 	 * @return La información de la componentes
 	 */
-	public IKVLista<?,ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo);
+	public IKVLista<Integer,ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo);
 
 	/**
 	 * A partir del grafo de estaciones construido anteriormente pinte sobre el mapa de la red vial de Chicago

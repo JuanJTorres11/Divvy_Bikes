@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.Scanner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -73,7 +74,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	// Estructuras donde se cargan los archivos
 
-	GrafoNoDirigido <Integer, Vertice, Camino> grafo = new GrafoNoDirigido <Integer, Vertice, Camino>();
+	private GrafoNoDirigido <Integer, Vertice, Camino> grafo = new GrafoNoDirigido <Integer, Vertice, Camino>();
 
 	//-------------------------------------------------------------------------------------
 	// MÉTODOS DE LA GUIA
@@ -115,13 +116,31 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		return null;
 	}
 
-	public IKVLista<?, Estacion> B1_estacionesCongestionadas(int n)
+
+	/**
+	 * Determinar las n estaciones de bicicleta más congestionadas en Chicago (aquellas que contiene la mayor cantidad de viajes que salen y llegan a esta).
+	 */
+	public IKVLista<Integer, Estacion> B1_estacionesCongestionadas(int n)
 	{
-		//TODO Visualizacion Mapa
-		return null;
+		Iterator<Vertice> iter = grafo.vertices();
+		Estacion [] estaciones = new Estacion [585];
+		int i = 0;
+		while (iter.hasNext())
+		{
+			Vertice temp = iter.next();
+			if (temp  instanceof Estacion)
+				estaciones[i] =(Estacion) temp;
+			i++;
+		}
+		Sorts<Estacion> sort = new Sorts<Estacion>();
+		sort.quickSort(estaciones, 0, estaciones.length-1);
+		KVLinkedList<Integer, Estacion> masCongestionadas = new KVLinkedList<Integer, Estacion> ();
+		for (int j = 0; j < n; j++)
+			masCongestionadas.add(estaciones[j]);
+		return masCongestionadas;
 	}
 
-	public IKVLista<?, Camino> B2_rutasMinimas(IKVLista<?, Estacion> stations)
+	public IKVLista<Integer, Camino> B2_rutasMinimas(IKVLista<Integer, Estacion> stations)
 	{
 		//TODO Visualizacion Mapa
 		return null;
@@ -138,7 +157,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		//TODO Visualizacion Mapa
 	}
 
-	public IKVLista<?, ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
+	public IKVLista<Integer, ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
 	{
 		//TODO Visualizacion Mapa
 		return null;
