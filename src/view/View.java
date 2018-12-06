@@ -46,7 +46,9 @@ public class View
 				//Memoria usada
 				long memoryAfterCase1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 				System.out.println("Tiempo en cargar: " + duration + " milisegundos \nMemoria utilizada:  "+ ((memoryAfterCase1 - memoryBeforeCase1)/1000000.0) + " MB");
-
+				
+				//cargar estaciones y viajes
+				
 				break;
 
 			case 2: //1A
