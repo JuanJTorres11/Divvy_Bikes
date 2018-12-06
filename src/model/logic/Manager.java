@@ -80,7 +80,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	private GrafoNoDirigido <Integer, Vertice, Camino> grafo = new GrafoNoDirigido <Integer, Vertice, Camino>();
 
 	//-------------------------------------------------------------------------------------
-	// MÉTODOS DE LA GUIA
+	// Mï¿½TODOS DE LA GUIA
 	//-------------------------------------------------------------------------------------
 
 	public DibujarFiguras mostrarMapa(IKVLista circulos, IKVLista rectangulos, IKVLista <Integer,Camino> lineas)
@@ -148,7 +148,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	private IKVLista<Integer, Estacion> b = new KVLinkedList <Integer, Estacion> ();
 	/**
-	 * Determinar las n estaciones de bicicleta más congestionadas en Chicago (aquellas que contiene la mayor cantidad de viajes que salen y llegan a esta).
+	 * Determinar las n estaciones de bicicleta mï¿½s congestionadas en Chicago (aquellas que contiene la mayor cantidad de viajes que salen y llegan a esta).
 	 */
 	public IKVLista<Integer, Estacion> B1_estacionesCongestionadas(int n)
 	{
@@ -204,7 +204,19 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	public void C1_persistirGrafoEstaciones(IGrafo grafoEstaciones)
 	{
-		//TODO Visualizacion Mapa
+		Iterator<Vertice> iter = grafo.vertices();
+		GrafoDirigido<Interger, Estacion, Camino> diG = new GrafoDirigido <Integer, Estacion, Camino>();
+		while (iter.hasNext())
+		{
+			Vertice temp = iter.next();
+			if (temp  instanceof Estacion)
+				diG.addVertex(temp.darId(),(Estacion)temp);
+		}
+		loadTrips(TRIPS_Q1, diG);
+		loadTrips(TRIPS_Q2, diG);
+		loadTrips(TRIPS_Q3, diG);
+		loadTrips(TRIPS_Q4, diG);
+		
 	}
 
 	public IKVLista<Integer, ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
@@ -220,7 +232,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	}
 
 	//-------------------------------------------------------------------------------------
-	// EXTENSIÓN
+	// EXTENSIï¿½N
 	//-------------------------------------------------------------------------------------
 
 	public void generarJSON(String archivo)
@@ -314,6 +326,45 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	}
 
+public void loadTrips (String tripsFile, Grafo Dirigido diG)
+	{
+		int i = 1;
+		try 
+		{
+			FileReader lector = new FileReader(tripsFile);
+			BufferedReader reader = new BufferedReader (lector);
+			reader.readLine();
+			String l = reader.readLine();
+			while (l != null  )
+			{
+				String [] linea = l.split(",");
+				int duration = Integer.parseInt(linea [4].charAt(0) == '"'? linea[4].substring(1, linea[4].length()-1) : linea[4]);
+				int fromStId = Integer.parseInt(linea [5].charAt(0) == '"'? linea[5].substring(1, linea[5].length()-1) : linea[5]);
+				int toStId = Integer.parseInt(linea [7].charAt(0) == '"'? linea[7].substring(1, linea[7].length()-1) : linea[7]);
+				Camino cam = null;
+				cam = diG.getInfoArc(fromStId, toStaId);
+				if(cam == null)
+					{
+						cam = new Camino (fromStId, toStaId, duration);
+						diG.addEdge(fromStId, toStaId,cam);
+					}
+				else
+					cam.agregarDuracion(duration);
+					
+				l = reader.readLine();
+				i++;
+			}
+			reader.close();
+			lector.close();
+			System.out.println("Se cargaron: " + bicicletas.size() + " bicicletas.");
+		}
+		catch (Exception e)
+		{
+			System.out.println("Murio en: " + i + " cargando " + tripsFile);
+			e.printStackTrace();
+		}
+		return temp;
+	}
 
 	//_________________________________________________________________________________________________________________
 }
