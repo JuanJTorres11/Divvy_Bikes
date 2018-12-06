@@ -5,6 +5,7 @@ import model.data_structures.GrafoNoDirigido;
 import model.data_structures.IGrafo;
 import model.data_structures.MaxHeapES;
 import model.data_structures.KVNode;
+import model.data_structures.Kruskal;
 import model.data_structures.IKVLista;
 import model.vo.Camino;
 import model.vo.ComponenteFuertementeConectada;
@@ -105,7 +106,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Camino A1_menorDistancia(double latInicial, double lonInicial, double latFinal, double lonFinal)
 	{
 		Estacion estacionInicio=EstacionMasCercana(latInicial, lonInicial);
@@ -113,7 +114,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		KVLinkedList<Integer, Vertice> listcam= dijkstra(estacionInicio, estacionFin);
 		Camino camResp= new Camino(estacionInicio.darId(), estacionFin.darId(), );
 		return camResp;
-				
+
 	}
 
 	public Camino A2_menorNumVertices(double latInicial, double lonInicial, double latFinal, double lonFinal)
@@ -145,6 +146,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		return estacionResp;
 	}
 
+	private IKVLista<Integer, Estacion> b = new KVLinkedList <Integer, Estacion> ();
 	/**
 	 * Determinar las n estaciones de bicicleta más congestionadas en Chicago (aquellas que contiene la mayor cantidad de viajes que salen y llegan a esta).
 	 */
@@ -166,13 +168,32 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		for (int j = 0; j < n; j++)
 			masCongestionadas.add(estaciones[j]);
 		mostrarMapa(null,masCongestionadas, null);
+		b = masCongestionadas;
 		return masCongestionadas;
 	}
 
 	public IKVLista<Integer, Camino> B2_rutasMinimas(IKVLista<Integer, Estacion> stations)
 	{
-		
-		return null;
+		GrafoNoDirigido<Integer, Estacion, Camino> g = new GrafoNoDirigido<Integer, Estacion, Camino>();
+		Iterator<Estacion> iter1 = b.iterator();
+		while (iter1.hasNext())
+		{
+			Estacion temp = iter1.next();
+			g.addVertex(temp.darId(),temp);
+			Iterator iter2 = grafo.adyacentes(temp.darId());
+			while (iter2.hasNext());
+			{
+				Camino c = (Camino) iter2.next();
+				g.addEdge(c.darInicio(), c.darFin(), c);
+			}
+		}
+		Kruskal k = new Kruskal(g);
+		KVLinkedList<Integer, Camino> resp = new KVLinkedList<Integer, Camino> ();
+		Iterator<Camino> iter3 = k.edges().iterator();
+		while (iter3.hasNext())
+			resp.add(iter3.next());
+		mostrarMapa(null, b, resp);
+		return resp;
 	}
 
 	public IGrafo C1_grafoEstaciones()
@@ -262,37 +283,37 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 			return LocalDateTime.of(agno, mes, dia, horas, minutos);
 	}
 	//_______________________________________________________________________________________________________________
-		public  KVLinkedList<Integer,Vertice> dijkstra(Vertice v_origen, Vertice v_destino)
-		{
+	public  KVLinkedList<Integer,Vertice> dijkstra(Vertice v_origen, Vertice v_destino)
+	{
 
-			KVLinkedList<Integer,Vertice> listtemp = new KVLinkedList<>();
-			return cortDijkstra(v_destino, v_origen);
+		KVLinkedList<Integer,Vertice> listtemp = new KVLinkedList<>();
+		return cortDijkstra(v_destino, v_origen);
+	}
+
+	public KVLinkedList<Integer,Vertice> cortDijkstra(Vertice v_origen, Vertice v_destino) 
+	{
+		int[] posVertPadre = new int[grafo.V()];
+		for (int i = 0; i < posVertPadre.length; i++) 
+		{
+			posVertPadre[i] = -1;
 		}
 
-		public KVLinkedList<Integer,Vertice> cortDijkstra(Vertice v_origen, Vertice v_destino) 
+		Iterator iteradorG = grafo.vertices(); 
+		Object[][] matrizAdyacentes = new Object[grafo.V()][grafo.V()];
+		for (int i = 0; i < grafo.listaAdyacencia.size(); i++) 
 		{
-			int[] posVertPadre = new int[grafo.V()];
-			for (int i = 0; i < posVertPadre.length; i++) 
+			for (int j = 0; j < grafo.listaAdyacencia.size(); j++) 
 			{
-				posVertPadre[i] = -1;
+				matrizAdyacentes[i][j] = iteradorG.next();
 			}
-			
-			Iterator iteradorG = grafo.vertices(); 
-			Object[][] matrizAdyacentes = new Object[grafo.V()][grafo.V()];
-			for (int i = 0; i < grafo.listaAdyacencia.size(); i++) 
-			{
-				for (int j = 0; j < grafo.listaAdyacencia.size(); j++) 
-				{
-					matrizAdyacentes[i][j] = iteradorG.next();
-				}
-			}
-
-			
-			 KVLinkedList<Integer,Vertice> listVertVisitados = new  KVLinkedList<Integer,Vertice>();
-			
-			
 		}
 
-		
-		//_________________________________________________________________________________________________________________
+
+		KVLinkedList<Integer,Vertice> listVertVisitados = new  KVLinkedList<Integer,Vertice>();
+
+
+	}
+
+
+	//_________________________________________________________________________________________________________________
 }

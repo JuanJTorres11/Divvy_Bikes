@@ -1,5 +1,7 @@
 package model.data_structures;
 
+import java.util.Iterator;
+
 public class MinHeapCP <T extends Comparable <T>>
 {
 
@@ -14,6 +16,15 @@ public class MinHeapCP <T extends Comparable <T>>
 		tamanoMax = max;
 	}
 
+	public MinHeapCP (IKVLista list)
+	{
+		lista = (T[]) new Comparable [list.size()];
+		size = list.size();
+		tamanoMax = list.size();
+		Iterator <T> iter = list.iterator();
+		while (iter.hasNext())
+			agregar(iter.next());
+	}
 	public int darNumElementos()
 	{
 		return size;
