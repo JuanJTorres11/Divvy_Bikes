@@ -82,7 +82,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	// MÉTODOS DE LA GUIA
 	//-------------------------------------------------------------------------------------
 
-	public DibujarFiguras mostrarMapa(IKVLista <Integer,Vertice> circulos, IKVLista <Integer,Vertice> rectangulos, IKVLista <Integer,Camino> lineas)
+	public DibujarFiguras mostrarMapa(IKVLista circulos, IKVLista rectangulos, IKVLista <Integer,Camino> lineas)
 	{
 		MapViewOptions options = new MapViewOptions();
 		options.importPlaces();
@@ -138,11 +138,13 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		KVLinkedList<Integer, Estacion> masCongestionadas = new KVLinkedList<Integer, Estacion> ();
 		for (int j = 0; j < n; j++)
 			masCongestionadas.add(estaciones[j]);
+		mostrarMapa(null,masCongestionadas, null);
 		return masCongestionadas;
 	}
 
 	public IKVLista<Integer, Camino> B2_rutasMinimas(IKVLista<Integer, Estacion> stations)
 	{
+		
 		return null;
 	}
 

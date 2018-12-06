@@ -88,4 +88,9 @@ public class GrafoNoDirigido <K extends Comparable <K>, V extends Vertice, A ext
 	{
 		return infoVertices.iterator();
 	}
+	
+	public Iterator<A> arcos()
+	{
+		return listaAdyacencia.iterator().next().iterator();
+	}
 }
