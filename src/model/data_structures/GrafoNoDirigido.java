@@ -11,7 +11,7 @@ public class GrafoNoDirigido <K extends Comparable <K>, V extends Vertice, A ext
 
 	private int arcos;
 
-	private HashChain <K,KVLinkedList<K,A>> listaAdyacencia;
+	public HashChain <K,KVLinkedList<K,A>> listaAdyacencia;
 
 	private HashChain <K,V> infoVertices;
 

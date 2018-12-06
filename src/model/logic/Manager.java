@@ -105,17 +105,44 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 			e.printStackTrace();
 		}
 	}
-
+	
 	public Camino A1_menorDistancia(double latInicial, double lonInicial, double latFinal, double lonFinal)
 	{
-		//TODO Visualizacion Mapa
-		return null;
+		Estacion estacionInicio=EstacionMasCercana(latInicial, lonInicial);
+		Estacion estacionFin=EstacionMasCercana(latFinal, lonFinal);
+		KVLinkedList<Integer, Vertice> listcam= dijkstra(estacionInicio, estacionFin);
+		Camino camResp= new Camino(estacionInicio.darId(), estacionFin.darId(), );
+		return camResp;
+				
 	}
 
 	public Camino A2_menorNumVertices(double latInicial, double lonInicial, double latFinal, double lonFinal)
 	{
 		//TODO Visualizacion Mapa
 		return null;
+	}
+
+	public Estacion EstacionMasCercana(double pLatitud, double pLongitud)
+	{
+		Estacion estacionResp = null;
+		double distanciaMinima = 6371;
+		Iterator<Vertice> iter = grafo.vertices();
+		int i = 0;
+		while (iter.hasNext())
+		{
+			Vertice temp = iter.next();
+			if (temp  instanceof Estacion)
+			{
+				Estacion eTemp = (Estacion)temp;
+				if(distancia(pLatitud, pLongitud, eTemp.darLatitud(), eTemp.darLongitud())<distanciaMinima)
+				{
+					estacionResp=eTemp;
+				}
+			}
+
+			i++;
+		}
+		return estacionResp;
 	}
 
 	/**
@@ -232,4 +259,38 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		else
 			return LocalDateTime.of(agno, mes, dia, horas, minutos);
 	}
+	//_______________________________________________________________________________________________________________
+		public  KVLinkedList<Integer,Vertice> dijkstra(Vertice v_origen, Vertice v_destino)
+		{
+
+			KVLinkedList<Integer,Vertice> listtemp = new KVLinkedList<>();
+			return cortDijkstra(v_destino, v_origen);
+		}
+
+		public KVLinkedList<Integer,Vertice> cortDijkstra(Vertice v_origen, Vertice v_destino) 
+		{
+			int[] posVertPadre = new int[grafo.V()];
+			for (int i = 0; i < posVertPadre.length; i++) 
+			{
+				posVertPadre[i] = -1;
+			}
+			
+			Iterator iteradorG = grafo.vertices(); 
+			Object[][] matrizAdyacentes = new Object[grafo.V()][grafo.V()];
+			for (int i = 0; i < grafo.listaAdyacencia.size(); i++) 
+			{
+				for (int j = 0; j < grafo.listaAdyacencia.size(); j++) 
+				{
+					matrizAdyacentes[i][j] = iteradorG.next();
+				}
+			}
+
+			
+			 KVLinkedList<Integer,Vertice> listVertVisitados = new  KVLinkedList<Integer,Vertice>();
+			
+			
+		}
+
+		
+		//_________________________________________________________________________________________________________________
 }
