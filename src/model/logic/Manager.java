@@ -1,6 +1,7 @@
 package model.logic;
 
 import model.data_structures.KVLinkedList;
+import model.data_structures.GrafoDirigido;
 import model.data_structures.GrafoNoDirigido;
 import model.data_structures.IGrafo;
 import model.data_structures.MaxHeapES;
@@ -198,14 +199,8 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	public IGrafo C1_grafoEstaciones()
 	{
-		//TODO Visualizacion Mapa
-		return null;
-	}
-
-	public void C1_persistirGrafoEstaciones(IGrafo grafoEstaciones)
-	{
 		Iterator<Vertice> iter = grafo.vertices();
-		GrafoDirigido<Interger, Estacion, Camino> diG = new GrafoDirigido <Integer, Estacion, Camino>();
+		GrafoDirigido<Integer, Estacion, Camino> diG = new GrafoDirigido <Integer, Estacion, Camino>();
 		while (iter.hasNext())
 		{
 			Vertice temp = iter.next();
@@ -216,7 +211,21 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		loadTrips(TRIPS_Q2, diG);
 		loadTrips(TRIPS_Q3, diG);
 		loadTrips(TRIPS_Q4, diG);
-		
+
+		KVLinkedList<Integer, Estacion> estaciones = new KVLinkedList<Integer, Estacion> ();
+		KVLinkedList<Integer, Camino> caminos = (KVLinkedList<Integer, Camino>) diG.arcos();
+		Iterator<Estacion> iter2 = diG.vertices();
+		while (iter.hasNext())
+		{
+			estaciones.add((Estacion) iter.next());
+		}
+		mostrarMapa(null, estaciones, caminos);
+		return diG;
+	}
+
+	public void C1_persistirGrafoEstaciones(IGrafo grafoEstaciones)
+	{
+
 	}
 
 	public IKVLista<Integer, ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo)
@@ -326,7 +335,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 
 	}
 
-public void loadTrips (String tripsFile, Grafo Dirigido diG)
+	public void loadTrips (String tripsFile, GrafoDirigido diG)
 	{
 		int i = 1;
 		try 
@@ -342,28 +351,26 @@ public void loadTrips (String tripsFile, Grafo Dirigido diG)
 				int fromStId = Integer.parseInt(linea [5].charAt(0) == '"'? linea[5].substring(1, linea[5].length()-1) : linea[5]);
 				int toStId = Integer.parseInt(linea [7].charAt(0) == '"'? linea[7].substring(1, linea[7].length()-1) : linea[7]);
 				Camino cam = null;
-				cam = diG.getInfoArc(fromStId, toStaId);
+				cam = diG.getInfoArc(fromStId, toStId);
 				if(cam == null)
-					{
-						cam = new Camino (fromStId, toStaId, duration);
-						diG.addEdge(fromStId, toStaId,cam);
-					}
+				{
+					cam = new Camino (fromStId, toStId, duration);
+					diG.addEdge(fromStId, toStId,cam);
+				}
 				else
 					cam.agregarDuracion(duration);
-					
+
 				l = reader.readLine();
 				i++;
 			}
 			reader.close();
 			lector.close();
-			System.out.println("Se cargaron: " + bicicletas.size() + " bicicletas.");
 		}
 		catch (Exception e)
 		{
 			System.out.println("Murio en: " + i + " cargando " + tripsFile);
 			e.printStackTrace();
 		}
-		return temp;
 	}
 
 	//_________________________________________________________________________________________________________________

@@ -17,6 +17,10 @@ public class Camino implements Comparable<Camino>
 	 */
 	double peso;
 
+	int duracion;
+
+	int cont;
+
 	public Camino (int i, int f, double w)
 	{
 		idInicio = i;
@@ -24,11 +28,31 @@ public class Camino implements Comparable<Camino>
 		peso = w;
 	}
 
+	public Camino (int i, int f, double w, int d)
+	{
+		idInicio = i;
+		idFin = f;
+		peso = w;
+		duracion = d;
+		cont = 1;
+	}
+
+	public Camino (int i, int f, int d)
+	{
+		idInicio = i;
+		idFin = f;
+		peso = 0;
+		duracion = d;
+		cont = 1;
+	}
+
 	public Camino ()
 	{
 		idInicio = 0;
 		idFin = 0;
 		peso = 0;
+		duracion = 0;
+		cont = 0;
 	}
 
 	/**
@@ -86,5 +110,11 @@ public class Camino implements Comparable<Camino>
 		else if (peso > o.peso)
 			return 1;
 		return 0;
+	}
+
+	public void agregarDuracion(int duration)
+	{
+		// TODO Auto-generated method stub
+
 	}
 }

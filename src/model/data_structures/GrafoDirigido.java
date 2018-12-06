@@ -81,4 +81,18 @@ public class GrafoDirigido <K extends Comparable <K>, V extends Vertice, A exten
 	{
 		return listaAdyacencia.get(idVertex).iteradorK();
 	}
+
+	public Iterator<V> vertices()
+	{
+		return infoVertices.iterator();
+	}
+
+	public Iterable<A> arcos()
+	{
+		Iterator<KVLinkedList<K,A>> iter = listaAdyacencia.iterator();
+		KVLinkedList<K,A> temp = iter.next();
+		while (iter.hasNext())
+			temp.concat(temp);
+		return temp;
+	}
 }
