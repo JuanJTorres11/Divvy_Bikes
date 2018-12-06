@@ -1,7 +1,7 @@
 package api;
 
 import model.data_structures.IGrafo;
-import model.data_structures.ILista;
+import model.data_structures.IKVLista;
 import model.vo.Camino;
 import model.vo.ComponenteFuertementeConectada;
 import model.vo.Estacion;
@@ -33,13 +33,15 @@ public interface IManager
 	 * @param n. El número de estaciones
 	 * @return Una lista de las n estaciones más congestionadas
 	 */
-	public ILista<?, Estacion> B1_estacionesCongestionadas(int n);
+	public IKVLista<?, Estacion> B1_estacionesCongestionadas(int n);
 
 	/**
 	 * Retorna una lista con las rutas mínimas (con criterio distancia harvesiana) que conecten las n estaciones encontradas.
 	 * @return Una lista con las rutas encontradas.
 	 */
-	public ILista<?, Camino> B2_rutasMinimas(int n);
+
+	public IKVLista<?, Camino> B2_rutasMinimas(IKVLista<?, Estacion> stations);
+
 
 	/**
 	 * Crea un Grafo Dirigido tomando como vértices únicamente los nodos estación y como arcos los viajes de bicicletas entre las mismas.
@@ -59,7 +61,7 @@ public interface IManager
 	 * @param grafo grafo dirigido para calcular componentes fuertemente conectadas
 	 * @return La información de la componentes
 	 */
-	public ILista<?,ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo);
+	public IKVLista<?,ComponenteFuertementeConectada> C2_componentesFuertementeConectados(IGrafo grafo);
 
 	/**
 	 * A partir del grafo de estaciones construido anteriormente pinte sobre el mapa de la red vial de Chicago

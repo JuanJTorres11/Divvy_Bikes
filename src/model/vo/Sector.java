@@ -1,6 +1,6 @@
 package model.vo;
 
-import model.data_structures.DoublyLinkedList;
+import model.data_structures.KVLinkedList;
 
 public class Sector
 {
@@ -14,9 +14,9 @@ public class Sector
 
 	private int id;
 
-	private DoublyLinkedList<Integer, Estacion> estaciones;
+	private KVLinkedList<Integer, Estacion> estaciones;
 
-	private DoublyLinkedList<Integer, Interseccion> intersecciones;
+	private KVLinkedList<Integer, Interseccion> intersecciones;
 
 	public Sector(double latMin, double latMax, double longMin, double longMax, int id)
 	{
@@ -25,8 +25,8 @@ public class Sector
 		this.longMin = longMin;
 		this.longMax = longMax;
 		this.id = id;
-		intersecciones = new DoublyLinkedList<Integer, Interseccion>();
-		estaciones = new DoublyLinkedList<Integer, Estacion>();
+		intersecciones = new KVLinkedList<Integer, Interseccion>();
+		estaciones = new KVLinkedList<Integer, Estacion>();
 	}
 
 	public void agregarInterseccion(Interseccion inter)
@@ -79,12 +79,12 @@ public class Sector
 		return id;
 	}
 
-	public DoublyLinkedList<Integer, Interseccion> darIntersecciones()
+	public KVLinkedList<Integer, Interseccion> darIntersecciones()
 	{
 		return intersecciones;
 	}
 
-	public DoublyLinkedList<Integer, Estacion> darEstaciones()
+	public KVLinkedList<Integer, Estacion> darEstaciones()
 	{
 		return estaciones;
 	}

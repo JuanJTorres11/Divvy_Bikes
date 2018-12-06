@@ -14,7 +14,7 @@ import com.teamdev.jxmaps.RectangleOptions;
 import com.teamdev.jxmaps.Circle;
 import com.teamdev.jxmaps.CircleOptions;
 import com.teamdev.jxmaps.swing.MapView;
-import model.data_structures.ILista;
+import model.data_structures.IKVLista;
 import model.vo.Camino;
 import model.vo.Vertice;
 
@@ -26,16 +26,16 @@ public class DibujarFiguras extends MapView
 
 	Map map;
 
-	ILista <?, Vertice<?>> circulos;
+	IKVLista <?, Vertice<?>> circulos;
 
-	ILista <?, Vertice<?>> rectangulos;
+	IKVLista <?, Vertice<?>> rectangulos;
 
-	ILista <?, Camino> lineas; 
+	IKVLista <?, Camino> lineas; 
 
 	LatLngBounds bordes = new LatLngBounds (new LatLng (41.657972891282526, -87.81235055856227), new LatLng (42.063999, -87.52849012951941));
 
 	// Constructor
-	public DibujarFiguras(MapViewOptions options, ILista <?, Vertice<?>> circ, ILista <?, Vertice<?>> rect, ILista <?, Camino> linea)
+	public DibujarFiguras(MapViewOptions options, IKVLista <?, Vertice<?>> circ, IKVLista <?, Vertice<?>> rect, IKVLista <?, Camino> linea)
 	{
 		super(options);
 

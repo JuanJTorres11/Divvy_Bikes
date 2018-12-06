@@ -6,7 +6,7 @@ import java.util.Iterator;
  * Clase que representa la lista doblemente encadenada
  * @param <E> Tipo de los objetos que almacenará la lista.
  */
-public class DoublyLinkedList <K,V> implements ILista<K,V>
+public class KVLinkedList <K,V> implements IKVLista<K,V>
 {
 	/**
 	 * Atributo que indica la cantidad de elementos que han sido almacenados en la lista.
@@ -16,15 +16,18 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 	/**
 	 * Primer nodo de la lista.
 	 */
-	private Node <K,V> primerNodo;
+	private KVNode <K,V> primerNodo;
 
-	private Node<K,V> ultimoNodo;
+	/**
+	 * Ultimo nodo de la lista.
+	 */
+	private KVNode<K,V> ultimoNodo;
 
 	/**
 	 * Construye una lista vacia
 	 * <b>post:< /b> se ha inicializado el primer nodo en null
 	 */
-	public DoublyLinkedList () 
+	public KVLinkedList () 
 	{
 		primerNodo = null;
 		cantidadElementos = 0;
@@ -35,12 +38,12 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 	 * @param nPrimero el elemento a guardar en el primer nodo
 	 * @throws NullPointerException si el elemento recibido es nulo
 	 */
-	public DoublyLinkedList (K llave, V valor)
+	public KVLinkedList (K llave, V valor)
 	{
 		if(valor == null)
 			throw new NullPointerException("Se recibe un elemento nulo");
 
-		primerNodo = new Node <K,V>(llave, valor);
+		primerNodo = new KVNode <K,V>(llave, valor);
 		cantidadElementos = 1;
 	}
 
@@ -86,114 +89,40 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 		return new IteradorK <K,V> (primerNodo);
 	}
 
-	/**
-	 * Elimina el nodo que contiene al objeto que llega por parámetro.
-	 * Actualiza la cantidad de elementos.
-	 * @param objeto el objeto que se desea eliminar. objeto != null
-	 * @return true en caso que exista el objeto y se pueda eliminar o false en caso contrario
-	 */
-	public boolean remove(Object o) 
-	{
-		boolean eliminado = false;
-		boolean encontrado = false;
-		Node<K,V> actual = (Node<K,V>) primerNodo;
-		while (actual!= null && !encontrado)
-		{
-			if (actual.darValor().equals(o))
-			{
-				if (actual.darAnterior() != null)
-					actual.darAnterior().cambiarSiguiente(actual.darSiguiente());
-				else primerNodo = (Node<K,V>) actual.darSiguiente();
-				if (actual.darSiguiente() != null)
-				{
-					Node<K,V> siguiente = (Node<K,V>) actual.darSiguiente();
-					siguiente.cambiarAnterior(actual.darAnterior());
-				}
-				encontrado = true;
-				eliminado = true;
-				cantidadElementos --;
-			}
-			else 
-			{
-				actual = (Node<K,V>) actual.darSiguiente();
-			}
-		}
-		return eliminado;
-	}
-
-	/**
-	 * Elimina el nodo en la posición por parámetro.
-	 * Actualiza la cantidad de elementos.
-	 * @param pos la posición que se desea eliminar
-	 * @return el elemento eliminado
-	 * @throws IndexOutOfBoundsException si index < 0 o index >= size()
-	 */
-	public V removeAtK (int index) 
-	{
-		V eliminado = null;
-		if (!isEmpty())
-		{		
-			if (index < 0 || index >= cantidadElementos)
-				throw new IndexOutOfBoundsException();
-
-			Node<K,V> actual = (Node<K,V>) primerNodo;
-			int posActual = 0;
-			while( posActual < (index))
-			{
-				posActual ++;
-				actual = (Node<K,V>) actual.darSiguiente();
-			}
-			eliminado = actual.darValor();
-			if (actual.darAnterior() != null)
-				actual.darAnterior().cambiarSiguiente(actual.darSiguiente().darSiguiente());
-			else primerNodo = (Node<K,V>) actual.darSiguiente();
-			if (actual.darSiguiente() != null)
-			{
-				Node<K,V> siguiente = (Node<K,V>) actual.darSiguiente();
-				siguiente.cambiarAnterior(actual.darAnterior());
-			}
-			cantidadElementos --;
-		}
-		return eliminado;
-	}
-
 	@Override
-	public Node<K,V> getFirst()
+	public KVNode<K,V> getFirst()
 	{
 		return primerNodo;	
 	}
 
-	public Node <K,V> getLast()
+	public KVNode <K,V> getLast()
 	{
 		return ultimoNodo;		
 	}
 
-	public Node <K,V> get (int index)
+	public KVNode <K,V> get (int index)
 	{
 		if(index < 0 || index >= cantidadElementos)
 		{
 			throw new IndexOutOfBoundsException("Se está pidiendo el indice: " + index + " y el tamaño de la lista es de " + cantidadElementos);
 		}
-		Node <K,V> actual = null;
-		if ((index-0) <= (cantidadElementos-1-index))
-		{
+		KVNode <K,V> actual = null;
+		if (index == 0)
 			actual = primerNodo;
-			for (int i = 0; i <= index-0; i++)
-				actual = actual.darSiguiente();
-		}
+
 		else
 		{
-			actual = ultimoNodo;
-			for (int i = 0; i <= cantidadElementos-1-index; i++)
-				actual = actual.darAnterior();
+			actual = primerNodo.darSiguiente();
+			for (int i = 1; i < index; i++)
+				actual = actual.darSiguiente();
 		}
 		return actual;
 	}
 
-	public Node<K,V> get (K key)
+	public KVNode<K,V> get (K key)
 	{
-		Node <K,V> buscado = null;
-		Node <K,V> actual = primerNodo;
+		KVNode <K,V> buscado = null;
+		KVNode <K,V> actual = primerNodo;
 		while (actual != null)
 		{
 			if (actual.darLlave().equals(key))
@@ -207,7 +136,7 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 	}
 
 	/**
-	 * Devuelve el nodo de la posición dada
+	 * Devuelve el elemento del nodo de la posición dada
 	 * @param pos la posición  buscada
 	 * @return el nodo en la posición dada 
 	 * @throws IndexOutOfBoundsException si index < 0 o index >= size()
@@ -219,20 +148,12 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 			throw new IndexOutOfBoundsException("Se está pidiendo el indice: " + index + " y el tamaño de la lista es de " + cantidadElementos);
 		}
 
-		Node <K,V> actual = primerNodo;
-		int posActual = 0;
-		while(actual != null && posActual < index)
-		{
-			actual = actual.darSiguiente();
-			posActual ++;
-		}
-		return actual.darValor();
+		return get(index).darValor();
 	}
 
 
-	public void concat (DoublyLinkedList <K,V> lista)
+	public void concat (KVLinkedList <K,V> lista)
 	{
-		lista.getFirst().cambiarAnterior(ultimoNodo);
 		ultimoNodo.cambiarSiguiente(lista.getFirst());
 		ultimoNodo = lista.getLast();
 		cantidadElementos += lista.size();
@@ -251,7 +172,7 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 		boolean añadido = false;
 		if (e != null)
 		{
-			Node<K,V> nuevo = new Node<K,V> (e);
+			KVNode<K,V> nuevo = new KVNode<K,V> (e);
 			if (primerNodo == null)
 			{
 				primerNodo = nuevo;
@@ -261,7 +182,6 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 			}
 			else
 			{
-				primerNodo.cambiarAnterior(nuevo);
 				nuevo.cambiarSiguiente(primerNodo);
 				primerNodo = nuevo;
 				añadido = true;
@@ -285,7 +205,7 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 		boolean añadido = false;
 		if (value != null && key != null)
 		{
-			Node<K,V> nuevo = new Node<K,V> (key, value);
+			KVNode<K,V> nuevo = new KVNode<K,V> (key, value);
 			if (primerNodo == null)
 			{
 				primerNodo = nuevo;
@@ -295,7 +215,6 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 			}
 			else
 			{
-				primerNodo.cambiarAnterior(nuevo);
 				nuevo.cambiarSiguiente(primerNodo);
 				primerNodo = nuevo;
 				añadido = true;
@@ -314,7 +233,7 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 
 		if (e != null)
 		{
-			Node <K,V> nuevo = new Node <K,V>(e);
+			KVNode <K,V> nuevo = new KVNode <K,V>(e);
 			if(isEmpty())
 			{
 				primerNodo = nuevo;
@@ -325,7 +244,6 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 			else
 			{
 				ultimoNodo.cambiarSiguiente(nuevo);
-				nuevo.cambiarAnterior(ultimoNodo);
 				ultimoNodo = nuevo;
 				añadido = true;
 				cantidadElementos ++;  
@@ -342,7 +260,7 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 
 		if (value != null)
 		{
-			Node <K,V> nuevo = new Node <K,V>(key, value);
+			KVNode <K,V> nuevo = new KVNode <K,V>(key, value);
 			if(isEmpty())
 			{
 				primerNodo = nuevo;
@@ -353,7 +271,6 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 			else
 			{
 				ultimoNodo.cambiarSiguiente(nuevo);
-				nuevo.cambiarAnterior(ultimoNodo);
 				ultimoNodo = nuevo;
 				añadido = true;
 				cantidadElementos ++;  
@@ -382,12 +299,12 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 		{
 			if (isEmpty())
 			{
-				primerNodo = new Node <K,V>(elemento);
+				primerNodo = new KVNode <K,V>(elemento);
 				cantidadElementos ++;
 			}
 			else
 			{
-				Node <K,V> nuevo = new Node <K,V>(elemento);
+				KVNode <K,V> nuevo = new KVNode <K,V>(elemento);
 				if (index == 0)
 					add(elemento);
 
@@ -396,7 +313,7 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 
 				else 
 				{
-					Node <K,V> n = primerNodo;
+					KVNode <K,V> n = primerNodo;
 					int posActual = 0;
 					while( posActual < (index-1))
 					{
@@ -404,7 +321,6 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 						n = n.darSiguiente();
 					}
 					nuevo.cambiarSiguiente(n.darSiguiente());
-					nuevo.cambiarAnterior(n);
 					n.cambiarSiguiente(nuevo);
 					cantidadElementos ++;
 				}
@@ -422,12 +338,12 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 		{
 			if (isEmpty())
 			{
-				primerNodo = new Node <K,V>(key, value);
+				primerNodo = new KVNode <K,V>(key, value);
 				cantidadElementos ++;
 			}
 			else
 			{
-				Node <K,V> nuevo = new Node <K,V>(key, value);
+				KVNode <K,V> nuevo = new KVNode <K,V>(key, value);
 				if (index == 0)
 					add(key, value);
 
@@ -436,7 +352,7 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 
 				else 
 				{
-					Node <K,V> n = primerNodo;
+					KVNode <K,V> n = primerNodo;
 					int posActual = 0;
 					while( posActual < (index-1))
 					{
@@ -444,12 +360,81 @@ public class DoublyLinkedList <K,V> implements ILista<K,V>
 						n = n.darSiguiente();
 					}
 					nuevo.cambiarSiguiente(n.darSiguiente());
-					nuevo.cambiarAnterior(n);
 					n.cambiarSiguiente(nuevo);
 					cantidadElementos ++;
 				}
 			}
 		}
 		else throw new NullPointerException();
+	}
+
+	/**
+	 * Elimina el nodo que contiene al objeto que llega por parámetro.
+	 * Actualiza la cantidad de elementos.
+	 * @param objeto el objeto que se desea eliminar. objeto != null
+	 * @return true en caso que exista el objeto y se pueda eliminar o false en caso contrario
+	 */
+	public boolean remove(V o) 
+	{
+		if (primerNodo != null)
+		{
+			if (primerNodo.darValor().equals(o))
+				primerNodo = primerNodo.darSiguiente();
+
+			boolean eliminado = false;
+			boolean encontrado = false;
+			KVNode<K,V> actual = primerNodo;
+			while (actual.darSiguiente()!= null && !encontrado)
+			{
+				if (actual.darSiguiente().equals(o))
+				{
+					actual.cambiarSiguiente(actual.darSiguiente().darSiguiente());
+					encontrado = true;
+					eliminado = true;
+					cantidadElementos --;
+				}
+				else 
+				{
+					actual = actual.darSiguiente();
+				}
+				return eliminado;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Elimina el nodo en la posición por parámetro.
+	 * Actualiza la cantidad de elementos.
+	 * @param pos la posición que se desea eliminar
+	 * @return el elemento eliminado
+	 * @throws IndexOutOfBoundsException si index < 0 o index >= size()
+	 */
+	@Override
+	public V removeAtK(int index)
+	{
+		V eliminado = null;
+		if (!isEmpty())
+		{		
+			if (index < 0 || index >= cantidadElementos)
+				throw new IndexOutOfBoundsException();
+
+			if (index == 0)
+			{
+				eliminado = primerNodo.darValor();
+				primerNodo = null;
+			}
+			KVNode<K,V> actual = primerNodo;
+			int posActual = 1;
+			while(posActual < index)
+			{
+				posActual ++;
+				actual = actual.darSiguiente();
+			}
+			eliminado = actual.darSiguiente().darValor();
+			actual.cambiarSiguiente(actual.darSiguiente().darSiguiente());
+			cantidadElementos --;
+		}
+		return eliminado;
 	}
 }
