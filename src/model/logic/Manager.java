@@ -4,6 +4,8 @@ import model.data_structures.DoublyLinkedList;
 import model.data_structures.GrafoNoDirigido;
 import model.data_structures.IGrafo;
 import model.data_structures.ILista;
+import model.data_structures.MaxHeapCP;
+import model.data_structures.Node;
 import model.vo.Camino;
 import model.vo.ComponenteFuertementeConectada;
 import model.vo.Estacion;
@@ -16,6 +18,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.Scanner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -259,15 +262,28 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		return null;
 	}
 
-	public ILista<?, Estacion> B1_estacionesCongestionadas(int n)
+	public ILista<Integer, Estacion> B1_estacionesCongestionadas(int n)
 	{
-		//TODO Visualizacion Mapa
-		return null;
+		Node estacionAct = estaciones.getFirst();
+		MaxHeapCP estacionesOrd= new MaxHeapCP(estaciones.size());
+		DoublyLinkedList<Integer, Estacion> resp=new DoublyLinkedList<>();
+		while(estacionAct!=null)
+		{
+			estacionesOrd.agregar((Comparable)estacionAct.darValor());
+			estacionAct.darSiguiente();
+		}
+		int j=0;
+		while(j<n)
+		{
+			resp.add((Estacion)estacionesOrd.max());
+			j++;
+		}
+		return resp;
 	}
 
-	public ILista<?, Camino> B2_rutasMinimas(ILista<?, Estacion> stations)
+	public ILista<?, Camino> B2_rutasMinimas(int n)
 	{
-		//TODO Visualizacion Mapa
+		ILista <Integer, Estacion> estacionesAct = B1_estacionesCongestionadas(n);
 		return null;
 	}
 
@@ -292,6 +308,15 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	{
 		//TODO Visualizacion Mapa!
 
+	}
+	public void actualizarViajesEstacion()
+	{
+		 Node<Integer, Viaje> viajeAct = viajes.getFirst();
+		 while(viajeAct!=null)
+		 {
+			 estaciones.get(viajeAct.darValor().getFromStationId()).darValor().cambiarCantidadViajesOut();
+			 estaciones.get(viajeAct.darValor().getToStationId()).darValor().cambiarCantidadViajesIn();	
+		 }
 	}
 
 	//-------------------------------------------------------------------------------------

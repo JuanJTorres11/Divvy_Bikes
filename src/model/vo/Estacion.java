@@ -7,6 +7,10 @@ public class Estacion <A> implements Comparable <Estacion<A>>, Vertice<A>
 
 	private String nombre;
 
+	private int cantidadViajesIn;
+	
+	private int cantidadViajesOut;
+	
 	private double latitud;
 
 	private double longitud;
@@ -21,6 +25,8 @@ public class Estacion <A> implements Comparable <Estacion<A>>, Vertice<A>
 	{
 		this.id = id;
 		this.nombre = nombre;
+		cantidadViajesIn = 0;
+		cantidadViajesOut = 0;
 		this.latitud = latitud;
 		this.longitud = longitud;
 		this.capacidad = capacidad;
@@ -49,6 +55,16 @@ public class Estacion <A> implements Comparable <Estacion<A>>, Vertice<A>
 	public String darNombre()
 	{
 		return nombre;
+	}
+
+	public int darCantidadViajesIn()
+	{
+		return cantidadViajesIn;
+	}
+
+	public int darCantidadViajesOut()
+	{
+		return cantidadViajesOut;
 	}
 
 	/**
@@ -101,6 +117,24 @@ public class Estacion <A> implements Comparable <Estacion<A>>, Vertice<A>
 		nombre = name;
 	}
 
+	/**
+	 * @param pCantidad the quantity to set
+	 */
+	public void cambiarCantidadViajes(int pCantidad)
+	{
+		cantidadViajesIn = pCantidad;
+	}
+
+	public void cambiarCantidadViajesIn()
+	{
+		cantidadViajesIn++;
+	}
+	
+	public void cambiarCantidadViajesOut()
+	{
+		cantidadViajesOut++;
+	}
+	
 	/**
 	 * @param latitude the latitude to set
 	 */

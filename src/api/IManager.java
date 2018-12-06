@@ -39,7 +39,7 @@ public interface IManager
 	 * Retorna una lista con las rutas mínimas (con criterio distancia harvesiana) que conecten las n estaciones encontradas.
 	 * @return Una lista con las rutas encontradas.
 	 */
-	public ILista<?, Camino> B2_rutasMinimas(ILista<?, Estacion> stations);
+	public ILista<?, Camino> B2_rutasMinimas(int n);
 
 	/**
 	 * Crea un Grafo Dirigido tomando como vértices únicamente los nodos estación y como arcos los viajes de bicicletas entre las mismas.
