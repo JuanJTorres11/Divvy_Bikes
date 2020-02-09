@@ -1,0 +1,2 @@
+https://gbfs.divvybikes.com/gbfs/en/station_information.json
+https://divvy-tripdata.s3.amazonaws.com/
