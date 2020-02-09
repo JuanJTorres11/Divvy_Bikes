@@ -64,6 +64,9 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	//Ruta del grafo
 	public static final String GRAFO = "data" + File.separator + "grafo.json";
 
+	//Ruta de la API Key de Maps
+	public static final String KEY = "data" + File.separator + "API.txt";
+
 	//-------------------------------------------------------------------------------------
 	// ATRIBUTOS
 	//-------------------------------------------------------------------------------------
@@ -88,7 +91,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 	{
 		MapViewOptions options = new MapViewOptions();
 		options.importPlaces();
-		options.setApiKey("***REMOVED***");
+		options.setApiKey(new BufferedReader(new FileReader(KEY)).readLine());
 		DibujarFiguras mapa = new DibujarFiguras(options, circulos, rectangulos, lineas);
 		return mapa;
 	}
