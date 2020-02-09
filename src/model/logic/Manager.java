@@ -15,13 +15,20 @@ import model.vo.Interseccion;
 import model.vo.Vertice;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipInputStream;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -387,6 +394,40 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(url).openStream());
 		FileOutputStream fileOutputStream = new FileOutputStream(archivo);
 		fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+	}
+
+	public void descomprimirArchivo (String archivo)
+	{
+		byte[] buffer = new byte[1024];
+		try
+		{
+			ZipInputStream zip = new ZipInputStream(new FileInputStream(archivo));
+			ZipEntry entrada = zip.getNextEntry();
+			boolean encontrado = false;
+			while (!encontrado || entrada != null)
+			{
+				String nombre = entrada.getName();
+				if (nombre.endsWith(".csv"))
+				{
+					encontrado = true;
+					File archivoDest = new File ("data", entrada.getName());
+					FileOutputStream out = new FileOutputStream(archivoDest);
+					int largo;
+					while ((largo = zip.read(buffer)) > 0)
+					{
+						out.write(buffer, 0, largo);
+					}
+					out.close();
+				}
+				entrada = zip.getNextEntry();
+			}
+			zip.closeEntry();
+			zip.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 }
