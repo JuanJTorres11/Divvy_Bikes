@@ -33,7 +33,17 @@ ehthumbs.db
 Thumbs.db
 
 # IDEs #
-.vscode/*
+.vscode/
+build/
+nbbuild/
+dist/
+nbdist/
+.classpath
+.project
+.settings/
 .metadata
 .buildpath
 .idea/
+*.iml
+*.iws
+*.ipr
