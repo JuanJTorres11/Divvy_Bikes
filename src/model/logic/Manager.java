@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -306,7 +307,7 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		else
 			return LocalDateTime.of(agno, mes, dia, horas, minutos);
 	}
-	//_______________________________________________________________________________________________________________
+	
 	public  KVLinkedList<Integer,Vertice> dijkstra(Vertice v_origen, Vertice v_destino)
 	{
 
@@ -376,5 +377,16 @@ public class Manager <K extends Comparable <K> ,V> implements IManager
 		}
 	}
 
-	//_________________________________________________________________________________________________________________
+	/**
+	 * Descarga un archivo desde un servidor web sin guardarlo en buffer de memoria.
+	 * @param url URL del archivo a descargar.
+	 * @param archivo dirección a donde se guardará el archivo.
+	 */
+	public void descargarArchivo (String url, String archivo)
+	{
+		ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(url).openStream());
+		FileOutputStream fileOutputStream = new FileOutputStream(archivo);
+		fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+	}
+
 }
